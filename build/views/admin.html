@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Админ-панель | ТРАТУАР</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
             --purple-hover: #a10d8a;
             --green: #3fb950;
             --red: #f85149;
-            --radius: 12px;
+            --radius: 10px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,53 +30,88 @@
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* Сайдбар */
         .sidebar {
             position: fixed;
             left: 0; top: 0; bottom: 0;
-            width: 260px;
+            width: 240px;
             background: var(--surface);
             border-right: 1px solid var(--border);
-            padding: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            z-index: 10;
+            gap: 20px;
+            z-index: 100;
             overflow-y: auto;
         }
-
         .sidebar .logo {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--purple);
             letter-spacing: -0.5px;
         }
-
-        .sidebar nav { display: flex; flex-direction: column; gap: 4px; }
-
+        .sidebar nav { display: flex; flex-direction: column; gap: 3px; }
         .sidebar nav a {
             color: var(--text-gray);
             text-decoration: none;
-            padding: 10px 14px;
+            padding: 9px 12px;
             border-radius: 8px;
             font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
+            transition: all 0.2s;
         }
-
         .sidebar nav a:hover, .sidebar nav a.active {
             background: rgba(203, 17, 171, 0.1);
             color: var(--purple);
         }
 
+        /* Мобильное меню */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            z-index: 200;
+            padding: 4px 2px;
+            padding-bottom: env(safe-area-inset-bottom, 4px);
+        }
+        .mobile-nav-inner {
+            display: flex;
+            gap: 1px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .mobile-nav-inner a {
+            flex: 1;
+            min-width: 48px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 9px;
+            text-align: center;
+            padding: 6px 2px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .mobile-nav-inner a i { font-size: 16px; }
+        .mobile-nav-inner a.active { color: var(--purple); background: rgba(203,17,171,0.1); }
+
         .main {
-            margin-left: 260px;
-            padding: 30px;
+            margin-left: 240px;
+            padding: 20px 16px;
+            padding-bottom: 80px;
         }
 
         .section { display: none; }
@@ -86,245 +121,201 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
-
-        .top-bar h1 { font-size: 26px; font-weight: 800; }
+        .top-bar h1 { font-size: 22px; font-weight: 800; }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
         }
-
         .stat-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 20px 24px;
+            padding: 14px;
         }
-
-        .stat-card .stat-value {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--purple);
-        }
-
-        .stat-card .stat-label {
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .stat-card .stat-value { font-size: 24px; font-weight: 800; color: var(--purple); }
+        .stat-card .stat-label { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 2px; }
 
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 14px;
+            margin-bottom: 14px;
         }
-
         .panel h2 {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-
         .panel h2 i { color: var(--purple); }
 
-        table { width: 100%; border-collapse: collapse; }
-
+        .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -14px;
+            padding: 0 14px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 550px; }
         th, td {
-            padding: 12px 10px;
+            padding: 10px 8px;
             text-align: left;
             border-bottom: 1px solid var(--border);
-            font-size: 13px;
+            font-size: 12px;
         }
-
         th {
             color: var(--text-gray);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
+            font-size: 10px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
         }
-
-        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        tr:active td { background: rgba(255,255,255,0.03); }
 
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: var(--radius);
-            padding: 40px;
+            padding: 24px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
             color: var(--text-gray);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
         }
-
-        .upload-zone:hover {
-            border-color: var(--purple);
-            background: rgba(203, 17, 171, 0.05);
-            color: var(--purple);
-        }
-
-        .upload-zone i { font-size: 40px; margin-bottom: 10px; display: block; }
+        .upload-zone:active { border-color: var(--purple); background: rgba(203,17,171,0.05); }
+        .upload-zone i { font-size: 30px; margin-bottom: 8px; display: block; }
+        .upload-zone p { font-size: 13px; }
 
         .photos-preview {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-top: 16px;
         }
-
         .photo-item {
-            position: relative;
-            width: 100px;
+            width: 75px;
         }
-
         .photo-item img {
-            width: 100px;
-            height: 100px;
+            width: 75px; height: 75px;
             object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--border);
+            border-radius: 6px;
+            border: 1px solid var(--border);
         }
-
         .photo-item .copy-btn {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
+            display: block;
+            width: 100%;
             background: var(--purple);
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 2px 6px;
+            padding: 3px;
             font-size: 10px;
             cursor: pointer;
+            margin-top: 3px;
         }
-
         .photo-item .photo-url {
-            font-size: 10px;
+            font-size: 8px;
             color: var(--text-gray);
-            margin-top: 4px;
             word-break: break-all;
             text-align: center;
+            margin-top: 2px;
         }
 
         .btn {
-            padding: 8px 18px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 6px;
             border: none;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
+            white-space: nowrap;
             transition: all 0.2s;
+            touch-action: manipulation;
         }
-
-        .btn-primary {
-            background: var(--purple);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--purple-hover);
-        }
-
-        .btn-danger {
-            background: rgba(248, 81, 73, 0.15);
-            color: var(--red);
-        }
-
-        .btn-danger:hover {
-            background: var(--red);
-            color: white;
-        }
-
-        .btn-green {
-            background: rgba(63, 185, 80, 0.15);
-            color: var(--green);
-        }
-
-        .btn-green:hover {
-            background: var(--green);
-            color: white;
-        }
+        .btn-primary { background: var(--purple); color: white; }
+        .btn-primary:active { background: var(--purple-hover); transform: scale(0.97); }
+        .btn-danger { background: rgba(248,81,73,0.15); color: var(--red); }
+        .btn-danger:active { background: var(--red); color: white; }
+        .btn-green { background: rgba(63,185,80,0.15); color: var(--green); }
+        .btn-green:active { background: var(--green); color: white; }
 
         .badge {
             display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
         }
-
-        .badge-new { background: rgba(203, 17, 171, 0.15); color: var(--purple); }
+        .badge-new { background: rgba(203,17,171,0.15); color: var(--purple); }
 
         .form-row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            align-items: flex-end;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
         }
-
         .form-row input {
-            flex: 1;
-            min-width: 150px;
-            padding: 10px 14px;
+            width: 100%;
+            padding: 10px 12px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 6px;
             background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
+            -webkit-appearance: none;
+            appearance: none;
         }
-
-        .form-row input:focus {
-            border-color: var(--purple);
-            outline: none;
-        }
-
-        .form-row label {
-            font-size: 11px;
+        .form-row input:focus { border-color: var(--purple); outline: none; }
+        .form-group { display: flex; flex-direction: column; gap: 2px; }
+        .form-group label {
+            font-size: 10px;
             color: var(--text-gray);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
-            margin-bottom: 4px;
+            letter-spacing: 0.3px;
         }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+        .form-row .btn { align-self: flex-start; }
 
         .copied-toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
             background: var(--green);
             color: white;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             z-index: 999;
             display: none;
+            white-space: nowrap;
         }
 
-        @media (max-width: 900px) {
+        @media (min-width: 769px) {
+            .stats { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+            .stat-card { padding: 18px 20px; }
+            .stat-card .stat-value { font-size: 28px; }
+            .form-row { flex-direction: row; flex-wrap: wrap; }
+            .form-row input { flex: 1; min-width: 120px; }
+            .main { padding: 24px 30px 30px; }
+        }
+
+        @media (max-width: 768px) {
             .sidebar { display: none; }
-            .main { margin-left: 0; }
+            .mobile-nav { display: block; }
+            .main { margin-left: 0; padding: 12px 8px 90px; }
+            .top-bar h1 { font-size: 20px; }
         }
     </style>
 </head>
@@ -352,9 +343,19 @@
         </nav>
     </div>
 
+    <div class="mobile-nav">
+        <div class="mobile-nav-inner">
+            <a onclick="showSection('dashboard')" class="active" id="mnav-dashboard"><i class="fas fa-th-large"></i>Дашборд</a>
+            <a onclick="showSection('zay')" id="mnav-zay"><i class="fas fa-list-check"></i>Заявки</a>
+            <a onclick="showSection('materials')" id="mnav-materials"><i class="fas fa-cubes"></i>Матер.</a>
+            <a onclick="showSection('services')" id="mnav-services"><i class="fas fa-tools"></i>Услуги</a>
+            <a onclick="showSection('gallery')" id="mnav-gallery"><i class="fas fa-images"></i>Галерея</a>
+            <a href="/"><i class="fas fa-arrow-left"></i>Сайт</a>
+        </div>
+    </div>
+
     <div class="main">
 
-        <!-- ДАШБОРД -->
         <div class="section active" id="section-dashboard">
             <div class="top-bar">
                 <h1>📊 Дашборд</h1>
@@ -380,7 +381,6 @@
             </div>
         </div>
 
-        <!-- ЗАЯВКИ -->
         <div class="section" id="section-zay">
             <div class="top-bar">
                 <h1>📋 Заявки</h1>
@@ -390,11 +390,10 @@
             </div>
             <div class="panel">
                 <h2><i class="fas fa-list-check"></i> Все заявки</h2>
-                <div id="zay-table">Загрузка...</div>
+                <div class="table-wrap"><div id="zay-table">Загрузка...</div></div>
             </div>
         </div>
 
-        <!-- МАТЕРИАЛЫ -->
         <div class="section" id="section-materials">
             <div class="top-bar">
                 <h1>🧱 Материалы</h1>
@@ -418,18 +417,17 @@
                         <label>Описание</label>
                         <input type="text" id="mat-desc" placeholder="Краткое описание">
                     </div>
-                    <button class="btn btn-primary" onclick="addMaterial()" style="align-self: flex-end;">
+                    <button class="btn btn-primary" onclick="addMaterial()">
                         <i class="fas fa-plus"></i> Добавить
                     </button>
                 </div>
             </div>
             <div class="panel">
                 <h2><i class="fas fa-cubes"></i> Список материалов</h2>
-                <div id="materials-table">Загрузка...</div>
+                <div class="table-wrap"><div id="materials-table">Загрузка...</div></div>
             </div>
         </div>
 
-        <!-- УСЛУГИ -->
         <div class="section" id="section-services">
             <div class="top-bar">
                 <h1>🔧 Услуги</h1>
@@ -453,18 +451,17 @@
                         <label>Описание</label>
                         <input type="text" id="srv-desc" placeholder="Краткое описание">
                     </div>
-                    <button class="btn btn-primary" onclick="addService()" style="align-self: flex-end;">
+                    <button class="btn btn-primary" onclick="addService()">
                         <i class="fas fa-plus"></i> Добавить
                     </button>
                 </div>
             </div>
             <div class="panel">
                 <h2><i class="fas fa-tools"></i> Список услуг</h2>
-                <div id="services-table">Загрузка...</div>
+                <div class="table-wrap"><div id="services-table">Загрузка...</div></div>
             </div>
         </div>
 
-        <!-- ГАЛЕРЕЯ -->
         <div class="section" id="section-gallery">
             <div class="top-bar">
                 <h1>📸 Галерея</h1>
@@ -476,8 +473,8 @@
                 <h2><i class="fas fa-cloud-upload-alt"></i> Загрузить фото</h2>
                 <div class="upload-zone" id="upload-zone">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Кликните или перетащите фото для загрузки</p>
-                    <p style="font-size:12px;margin-top:8px;">JPEG, PNG, WebP, GIF до 10 МБ</p>
+                    <p>Нажмите для загрузки фото</p>
+                    <p style="font-size:11px;margin-top:6px;">JPEG, PNG, WebP, GIF до 10 МБ</p>
                     <input type="file" id="file-input" accept="image/*" style="display:none;">
                 </div>
                 <div class="photos-preview" id="photos-preview"></div>
@@ -491,9 +488,12 @@
     <script>
         function showSection(name) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.sidebar nav a, .mobile-nav-inner a').forEach(a => a.classList.remove('active'));
             document.getElementById('section-' + name).classList.add('active');
-            document.getElementById('nav-' + name).classList.add('active');
+            const nav = document.getElementById('nav-' + name);
+            const mnav = document.getElementById('mnav-' + name);
+            if (nav) nav.classList.add('active');
+            if (mnav) mnav.classList.add('active');
 
             if (name === 'zay') loadZayTable();
             if (name === 'materials') loadMaterialsTable();
@@ -508,220 +508,122 @@
             setTimeout(() => t.style.display = 'none', 2000);
         }
 
-        // ========== ДАШБОРД ==========
         async function loadDashboard() {
             try {
                 const [zayRes, matRes, srvRes] = await Promise.all([
-                    fetch('/api/zay'),
-                    fetch('/api/materials'),
-                    fetch('/api/services')
+                    fetch('/api/zay'), fetch('/api/materials'), fetch('/api/services')
                 ]);
                 const zayList = await zayRes.json();
                 const matList = await matRes.json();
                 const srvList = await srvRes.json();
-
                 document.getElementById('total-zay').textContent = zayList.length;
                 document.getElementById('total-materials').textContent = matList.length;
                 document.getElementById('total-services').textContent = srvList.length;
-
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('today-zay').textContent = zayList.filter(z => z.createdAt && z.createdAt.startsWith(today)).length;
-            } catch(e) {
-                console.error(e);
-            }
+            } catch(e) {}
         }
 
-        // ========== ЗАЯВКИ ==========
         async function loadZayTable() {
             try {
                 const res = await fetch('/api/zay');
                 const zayList = await res.json();
-                const html = `
-                    <table>
-                        <thead><tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Материал</th><th>Площадь</th><th>Комментарий</th><th>Дата</th><th></th></tr></thead>
-                        <tbody>${zayList.map(z => `
-                            <tr>
-                                <td><span class="badge badge-new">#${z.id}</span></td>
-                                <td>${z.name || '-'}</td>
-                                <td>${z.phone || '-'}</td>
-                                <td>${z.material || '-'}</td>
-                                <td>${z.area ? z.area + ' м²' : '-'}</td>
-                                <td>${z.comment || '-'}</td>
-                                <td style="color:var(--text-gray);">${z.createdAt ? new Date(z.createdAt).toLocaleString() : '-'}</td>
-                                <td><button class="btn btn-danger" onclick="deleteZay(${z.id})"><i class="fas fa-trash"></i></button></td>
-                            </tr>
-                        `).join('')}</tbody>
-                    </table>`;
-                document.getElementById('zay-table').innerHTML = zayList.length ? html : '<p style="color:var(--text-gray);">Нет заявок</p>';
-            } catch(e) {
-                document.getElementById('zay-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>';
-            }
+                document.getElementById('zay-table').innerHTML = zayList.length ? `
+                    <table><thead><tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Материал</th><th>Площадь</th><th>Комментарий</th><th>Дата</th><th></th></tr></thead>
+                    <tbody>${zayList.map(z => `<tr><td><span class="badge badge-new">#${z.id}</span></td><td>${z.name||'-'}</td><td>${z.phone||'-'}</td><td>${z.material||'-'}</td><td>${z.area?z.area+' м²':'-'}</td><td>${z.comment||'-'}</td><td style="color:var(--text-gray);">${z.createdAt?new Date(z.createdAt).toLocaleString():'-'}</td><td><button class="btn btn-danger" onclick="deleteZay(${z.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}</tbody></table>` : '<p style="color:var(--text-gray);">Нет заявок</p>';
+            } catch(e) { document.getElementById('zay-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>'; }
         }
 
         async function deleteZay(id) {
             if (!confirm('Удалить заявку #' + id + '?')) return;
             await fetch('/api/zay/' + id, { method: 'DELETE' });
-            loadZayTable();
-            loadDashboard();
+            loadZayTable(); loadDashboard();
         }
 
-        // ========== МАТЕРИАЛЫ ==========
         async function addMaterial() {
             const name = document.getElementById('mat-name').value.trim();
             if (!name) return alert('Введите название');
-            const data = {
-                name,
-                price: document.getElementById('mat-price').value.trim(),
-                link: document.getElementById('mat-link').value.trim(),
-                description: document.getElementById('mat-desc').value.trim()
-            };
             await fetch('/api/materials', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(data)
+                method: 'POST', headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ name, price: document.getElementById('mat-price').value.trim(), link: document.getElementById('mat-link').value.trim(), description: document.getElementById('mat-desc').value.trim() })
             });
             ['mat-name','mat-price','mat-link','mat-desc'].forEach(id => document.getElementById(id).value = '');
-            loadMaterialsTable();
-            loadDashboard();
+            loadMaterialsTable(); loadDashboard();
         }
 
         async function loadMaterialsTable() {
             try {
                 const res = await fetch('/api/materials');
                 const list = await res.json();
-                const html = `
-                    <table>
-                        <thead><tr><th>ID</th><th>Название</th><th>Цена</th><th>Описание</th><th>Фото</th><th></th></tr></thead>
-                        <tbody>${list.map(m => `
-                            <tr>
-                                <td>#${m.id}</td>
-                                <td>${m.name}</td>
-                                <td>${m.price || '-'}</td>
-                                <td>${m.description || '-'}</td>
-                                <td>${m.link ? '<img src="'+m.link+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">' : '-'}</td>
-                                <td><button class="btn btn-danger" onclick="deleteMaterial(${m.id})"><i class="fas fa-trash"></i></button></td>
-                            </tr>
-                        `).join('')}</tbody>
-                    </table>`;
-                document.getElementById('materials-table').innerHTML = list.length ? html : '<p style="color:var(--text-gray);">Нет материалов</p>';
-            } catch(e) {
-                document.getElementById('materials-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>';
-            }
+                document.getElementById('materials-table').innerHTML = list.length ? `
+                    <table><thead><tr><th>ID</th><th>Название</th><th>Цена</th><th>Описание</th><th>Фото</th><th></th></tr></thead>
+                    <tbody>${list.map(m => `<tr><td>#${m.id}</td><td>${m.name}</td><td>${m.price||'-'}</td><td>${m.description||'-'}</td><td>${m.link?'<img src="'+m.link+'" style="width:30px;height:30px;object-fit:cover;border-radius:4px;">':'-'}</td><td><button class="btn btn-danger" onclick="deleteMaterial(${m.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}</tbody></table>` : '<p style="color:var(--text-gray);">Нет материалов</p>';
+            } catch(e) { document.getElementById('materials-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>'; }
         }
 
         async function deleteMaterial(id) {
             if (!confirm('Удалить материал?')) return;
             await fetch('/api/materials/' + id, { method: 'DELETE' });
-            loadMaterialsTable();
-            loadDashboard();
+            loadMaterialsTable(); loadDashboard();
         }
 
-        // ========== УСЛУГИ ==========
         async function addService() {
             const name = document.getElementById('srv-name').value.trim();
             if (!name) return alert('Введите название');
-            const data = {
-                name,
-                price: document.getElementById('srv-price').value.trim(),
-                link: document.getElementById('srv-link').value.trim(),
-                description: document.getElementById('srv-desc').value.trim()
-            };
             await fetch('/api/services', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(data)
+                method: 'POST', headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ name, price: document.getElementById('srv-price').value.trim(), link: document.getElementById('srv-link').value.trim(), description: document.getElementById('srv-desc').value.trim() })
             });
             ['srv-name','srv-price','srv-link','srv-desc'].forEach(id => document.getElementById(id).value = '');
-            loadServicesTable();
-            loadDashboard();
+            loadServicesTable(); loadDashboard();
         }
 
         async function loadServicesTable() {
             try {
                 const res = await fetch('/api/services');
                 const list = await res.json();
-                const html = `
-                    <table>
-                        <thead><tr><th>ID</th><th>Название</th><th>Цена</th><th>Описание</th><th>Фото</th><th></th></tr></thead>
-                        <tbody>${list.map(s => `
-                            <tr>
-                                <td>#${s.id}</td>
-                                <td>${s.name}</td>
-                                <td>${s.price || '-'}</td>
-                                <td>${s.description || '-'}</td>
-                                <td>${s.link ? '<img src="'+s.link+'" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">' : '-'}</td>
-                                <td><button class="btn btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td>
-                            </tr>
-                        `).join('')}</tbody>
-                    </table>`;
-                document.getElementById('services-table').innerHTML = list.length ? html : '<p style="color:var(--text-gray);">Нет услуг</p>';
-            } catch(e) {
-                document.getElementById('services-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>';
-            }
+                document.getElementById('services-table').innerHTML = list.length ? `
+                    <table><thead><tr><th>ID</th><th>Название</th><th>Цена</th><th>Описание</th><th>Фото</th><th></th></tr></thead>
+                    <tbody>${list.map(s => `<tr><td>#${s.id}</td><td>${s.name}</td><td>${s.price||'-'}</td><td>${s.description||'-'}</td><td>${s.link?'<img src="'+s.link+'" style="width:30px;height:30px;object-fit:cover;border-radius:4px;">':'-'}</td><td><button class="btn btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}</tbody></table>` : '<p style="color:var(--text-gray);">Нет услуг</p>';
+            } catch(e) { document.getElementById('services-table').innerHTML = '<p style="color:var(--red);">Ошибка загрузки</p>'; }
         }
 
         async function deleteService(id) {
             if (!confirm('Удалить услугу?')) return;
             await fetch('/api/services/' + id, { method: 'DELETE' });
-            loadServicesTable();
-            loadDashboard();
+            loadServicesTable(); loadDashboard();
         }
 
-        // ========== ГАЛЕРЕЯ ==========
         function setupUpload() {
             const zone = document.getElementById('upload-zone');
             const input = document.getElementById('file-input');
-
             zone.onclick = () => input.click();
             zone.ondragover = (e) => { e.preventDefault(); zone.style.borderColor = '#cb11ab'; };
             zone.ondragleave = () => zone.style.borderColor = '#30363d';
-            zone.ondrop = (e) => {
-                e.preventDefault();
-                zone.style.borderColor = '#30363d';
-                if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
-            };
+            zone.ondrop = (e) => { e.preventDefault(); zone.style.borderColor = '#30363d'; if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]); };
             input.onchange = () => { if (input.files.length) uploadFile(input.files[0]); };
         }
 
         async function uploadFile(file) {
-            const formData = new FormData();
-            formData.append('photo', file);
+            const formData = new FormData(); formData.append('photo', file);
             try {
                 const res = await fetch('/api/upload', { method: 'POST', body: formData });
                 const data = await res.json();
-                if (data.success) {
-                    loadPhotos();
-                } else {
-                    alert('Ошибка: ' + (data.error || 'неизвестная ошибка'));
-                }
-            } catch(e) {
-                alert('Ошибка сети');
-            }
+                if (data.success) loadPhotos(); else alert('Ошибка: ' + (data.error || ''));
+            } catch(e) { alert('Ошибка сети'); }
         }
 
         async function loadPhotos() {
             try {
                 const res = await fetch('/api/photos');
                 const photos = await res.json();
-                const html = photos.map(p => `
-                    <div class="photo-item">
-                        <img src="${p.url}" alt="Фото">
-                        <button class="copy-btn" onclick="copyUrl('${p.url}')">📋</button>
-                        <div class="photo-url">${p.url}</div>
-                    </div>
-                `).join('');
-                document.getElementById('photos-preview').innerHTML = html || '<p style="color:var(--text-gray);">Нет загруженных фото</p>';
-            } catch(e) {
-                document.getElementById('photos-preview').innerHTML = '<p style="color:var(--red);">Ошибка</p>';
-            }
+                document.getElementById('photos-preview').innerHTML = photos.length ? photos.map(p => `<div class="photo-item"><img src="${p.url}"><button class="copy-btn" onclick="copyUrl('${p.url}')">📋</button><div class="photo-url">${p.url}</div></div>`).join('') : '<p style="color:var(--text-gray);">Нет фото</p>';
+            } catch(e) { document.getElementById('photos-preview').innerHTML = '<p style="color:var(--red);">Ошибка</p>'; }
         }
 
-        function copyUrl(url) {
-            navigator.clipboard.writeText(url).then(() => showToast());
-        }
+        function copyUrl(url) { navigator.clipboard.writeText(url).then(() => showToast()); }
 
-        loadDashboard();
-        setupUpload();
+        loadDashboard(); setupUpload();
     </script>
 
 </body>
