@@ -25,6 +25,7 @@
             --border: #ececec;
             --green: #0cc477;
             --orange: #ff7b00;
+            --red: #f85149;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
             --shadow: 0 4px 20px rgba(0,0,0,0.06);
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
@@ -32,9 +33,9 @@
             --radius-lg: 14px;
             --radius: 12px;
             --radius-sm: 8px;
+            --transition: all 0.3s ease;
         }
 
-        /* Тёмная тема */
         .dark-theme {
             --gray-bg: #0d1117;
             --white: #161b22;
@@ -42,51 +43,24 @@
             --text-gray: #8b949e;
             --text-light: #8b949e;
             --border: #30363d;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-            --shadow: 0 4px 20px rgba(0,0,0,0.3);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
             --dark: #0d1117;
             --purple-light: rgba(203,17,171,0.15);
         }
 
-        .dark-theme .header {
-            background: rgba(22,27,34,0.97) !important;
-            border-bottom-color: #30363d !important;
-        }
-
-        .dark-theme .top-bar {
-            background: #0d1117 !important;
-        }
-
-        .dark-theme .footer {
-            background: #0d1117 !important;
-        }
-
-        .dark-theme .hero-stat {
-            background: #161b22 !important;
-        }
-
-        .dark-theme .btn-outline {
-            border-color: #30363d !important;
-            color: #e6edf3 !important;
-        }
-
+        .dark-theme .header { background: rgba(22,27,34,0.97) !important; border-bottom-color: #30363d !important; }
+        .dark-theme .top-bar { background: #0d1117 !important; }
+        .dark-theme .footer { background: #0d1117 !important; }
+        .dark-theme .hero-stat { background: #161b22 !important; }
+        .dark-theme .btn-outline { border-color: #30363d !important; color: #e6edf3 !important; }
         .dark-theme .form-field input,
         .dark-theme .form-field select,
-        .dark-theme .form-field textarea {
-            background: #0d1117 !important;
-            border-color: #30363d !important;
-            color: #e6edf3 !important;
-        }
-
-        .dark-theme .about-link {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-
-        .dark-theme .promo-banner {
-            background: linear-gradient(135deg, #0d1117, #161b22) !important;
-        }
+        .dark-theme .form-field textarea { background: #0d1117 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+        .dark-theme .about-link { background: #161b22 !important; border-color: #30363d !important; }
+        .dark-theme .promo-banner { background: linear-gradient(135deg, #0d1117, #161b22) !important; }
+        .dark-theme .cookie-modal { background: #161b22; color: #e6edf3; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -101,123 +75,271 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* Кнопка темы */
+        /* ========== COOKIE OVERLAY ========== */
+        .cookie-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 99990;
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 16px;
+        }
+        .cookie-overlay.show { display: flex; }
+
+        .cookie-modal {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px 20px 20px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            color: var(--text);
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        .cookie-modal h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cookie-modal > p {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+        .cookie-modal > p a {
+            color: var(--purple);
+            text-decoration: underline;
+        }
+        .cookie-modal .cookie-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .cookie-modal .cookie-buttons .row {
+            display: flex;
+            gap: 8px;
+        }
+        .cookie-modal button {
+            flex: 1;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn-accept-all {
+            background: var(--purple);
+            color: white;
+            font-size: 15px !important;
+            padding: 14px !important;
+        }
+        .btn-accept-all:hover { background: var(--purple-dark); }
+        .btn-settings-cookie {
+            background: transparent;
+            border: 2px solid var(--border) !important;
+            color: var(--text);
+        }
+        .btn-settings-cookie:hover { border-color: var(--purple) !important; }
+        .btn-decline-all {
+            background: transparent;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+        .btn-decline-all:hover { color: var(--red); }
+
+        .cookie-settings {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .cookie-settings.show { display: block; }
+        .cookie-settings label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .cookie-settings label span { font-size: 11px; color: var(--text-gray); }
+        .cookie-settings input[type="checkbox"] {
+            width: 18px; height: 18px;
+            accent-color: var(--purple);
+            cursor: pointer;
+        }
+        .btn-save-settings {
+            width: 100%;
+            background: var(--purple);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+
+        /* ========== THEME TOGGLE ========== */
         .theme-toggle {
             position: fixed;
             bottom: 24px;
             right: 20px;
-            z-index: 999;
-            width: 50px;
-            height: 50px;
+            z-index: 998;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: var(--purple);
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 22px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 6px 20px rgba(203,17,171,0.4);
-            transition: all 0.3s;
+            transition: var(--transition);
         }
-
         .theme-toggle:hover {
             transform: scale(1.1);
             box-shadow: 0 8px 28px rgba(203,17,171,0.6);
         }
+        .theme-toggle:active { transform: scale(0.95); }
 
-        .theme-toggle:active {
-            transform: scale(0.95);
-        }
-
-        .cookie-banner {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: var(--white);
-            border-top: 1px solid var(--border);
-            padding: 12px 16px;
-            z-index: 9998;
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-        }
-        .cookie-banner.show { display: flex; }
-        .cookie-banner p { font-size: 12px; color: var(--text-light); }
-        .cookie-banner p a { color: var(--purple); text-decoration: underline; }
-        .cookie-banner div { display: flex; gap: 8px; }
-        .cookie-banner button {
-            flex: 1; background: var(--purple); color: white;
-            border: none; padding: 10px; border-radius: 8px;
-            font-weight: 700; font-size: 13px; cursor: pointer;
-        }
-        .cookie-banner .btn-outline-sm {
-            background: transparent; border: 1px solid var(--border); color: var(--text);
-        }
-
+        /* ========== TOP BAR ========== */
         .top-bar {
-            background: var(--dark); color: white;
-            padding: 6px 0; font-size: 10px; font-weight: 500;
+            background: var(--dark);
+            color: white;
+            padding: 6px 0;
+            font-size: 10px;
+            font-weight: 500;
         }
         .top-bar-inner {
-            max-width: 100%; padding: 0 12px;
-            display: flex; justify-content: center; align-items: center;
-            flex-wrap: wrap; gap: 6px; text-align: center;
+            max-width: 100%;
+            padding: 0 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            text-align: center;
         }
+        .top-bar a { color: rgba(255,255,255,0.8); text-decoration: none; }
+        .top-bar a:hover { color: white; }
 
+        /* ========== HEADER ========== */
         .header {
-            background: var(--white); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(10px);
             transition: background 0.3s;
         }
         .header-inner {
-            max-width: 100%; padding: 10px 14px;
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 8px; flex-wrap: wrap;
+            max-width: 100%;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         .logo {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--text);
+            text-decoration: none;
         }
         .logo-icon {
-            width: 32px; height: 32px; background: var(--purple);
-            border-radius: 10px; display: flex; align-items: center;
-            justify-content: center; color: white; font-size: 14px;
+            width: 32px; height: 32px;
+            background: var(--purple);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
         }
         .header-phone {
-            font-weight: 700; font-size: 14px; color: var(--text);
-            text-decoration: none; display: flex; align-items: center; gap: 4px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .header-phone i { color: var(--purple); font-size: 12px; }
         .header-btn {
-            background: var(--purple); color: white; border: none;
-            padding: 10px 16px; border-radius: 10px; font-weight: 700;
-            font-size: 13px; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+            background: var(--purple);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
         }
 
+        /* ========== HERO ========== */
         .hero {
-            max-width: 100%; padding: 16px 14px;
-            display: flex; flex-direction: column; gap: 16px;
+            max-width: 100%;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
         .hero-content { order: 2; }
         .hero-visual { order: 1; }
         .hero-badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            background: var(--purple-light); color: var(--purple-dark);
-            font-size: 10px; font-weight: 700; text-transform: uppercase;
-            padding: 4px 12px; border-radius: 20px; margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--purple-light);
+            color: var(--purple-dark);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
         }
         .hero h1 {
-            font-size: 28px; font-weight: 900; line-height: 1.1;
-            letter-spacing: -1px; margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
         }
         .hero h1 .accent { color: var(--purple); }
         .hero p {
-            font-size: 14px; color: var(--text-light);
-            margin-bottom: 12px; line-height: 1.5;
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
 
         .about-link {
@@ -232,49 +354,85 @@
             font-size: 13px;
             text-decoration: none;
             margin-bottom: 14px;
-            transition: all 0.2s;
+            transition: var(--transition);
             border: 1px solid rgba(255,255,255,0.1);
         }
         .about-link i { color: var(--purple); font-size: 14px; }
-        .about-link:hover { background: #2d2d2d; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transform: translateY(-1px); }
+        .about-link:hover {
+            background: #2d2d2d;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
 
         .hero-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-primary {
-            background: var(--purple); color: white; border: none;
-            padding: 14px 20px; border-radius: 12px; font-weight: 700;
-            font-size: 14px; cursor: pointer; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 6px;
-            flex: 1; justify-content: center; min-width: 140px;
+            background: var(--purple);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+            min-width: 140px;
         }
         .btn-outline {
-            background: transparent; color: var(--text);
-            border: 2px solid var(--border); padding: 14px 20px;
-            border-radius: 12px; font-weight: 700; font-size: 14px;
-            cursor: pointer; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 6px;
-            flex: 1; justify-content: center; min-width: 140px;
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+            min-width: 140px;
         }
         .hero-img-main {
-            width: 100%; aspect-ratio: 16/9; object-fit: cover;
-            border-radius: var(--radius-lg); box-shadow: var(--shadow);
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
         }
         .hero-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
         .hero-stat {
-            flex: 1; min-width: 60px; text-align: center;
-            background: var(--white); border-radius: 10px;
-            padding: 10px 6px; box-shadow: var(--shadow-sm);
+            flex: 1;
+            min-width: 60px;
+            text-align: center;
+            background: var(--white);
+            border-radius: 10px;
+            padding: 10px 6px;
+            box-shadow: var(--shadow-sm);
         }
         .hero-stat .num { font-size: 20px; font-weight: 900; color: var(--purple); }
         .hero-stat .label { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
 
+        /* ========== SECTIONS ========== */
         .section { max-width: 100%; padding: 0 14px; margin: 32px 0; }
         .section-title { font-size: 22px; font-weight: 900; margin-bottom: 14px; }
 
         .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .product-card {
-            background: var(--white); border-radius: var(--radius-lg);
-            overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
+        .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
         .product-card .img-wrap { aspect-ratio: 1/1; overflow: hidden; background: #e8e5dc; }
         .product-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .product-card .card-body { padding: 10px; }
@@ -284,75 +442,125 @@
 
         .benefits-row { display: flex; flex-direction: column; gap: 8px; }
         .benefit-card {
-            background: var(--white); border-radius: var(--radius-lg);
-            padding: 16px; display: flex; gap: 12px;
-            box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
+        .benefit-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
         .benefit-icon {
-            width: 40px; height: 40px; background: var(--purple-light);
-            border-radius: 10px; display: flex; align-items: center;
-            justify-content: center; font-size: 18px; color: var(--purple); flex-shrink: 0;
+            width: 40px; height: 40px;
+            background: var(--purple-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--purple);
+            flex-shrink: 0;
         }
         .benefit-card h4 { font-size: 14px; font-weight: 700; }
         .benefit-card p { font-size: 12px; color: var(--text-gray); }
 
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .g-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 1/1; }
+        .g-item {
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 1/1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .g-item:hover { transform: scale(1.02); }
         .g-item img { width: 100%; height: 100%; object-fit: cover; }
 
         .promo-banner {
             background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            border-radius: var(--radius-lg); padding: 24px 18px;
-            text-align: center; color: white;
+            border-radius: var(--radius-lg);
+            padding: 24px 18px;
+            text-align: center;
+            color: white;
         }
         .promo-content .big-discount { font-size: 48px; font-weight: 900; color: var(--purple); }
         .promo-content p { font-size: 14px; opacity: 0.8; margin: 8px 0 16px; }
 
         .form-section {
-            background: var(--white); border-radius: var(--radius-lg);
-            padding: 20px 16px; box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            box-shadow: var(--shadow);
         }
         .form-section h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
         .form-section .subtitle { font-size: 13px; color: var(--text-gray); margin-bottom: 16px; }
         .form-image { display: none; }
         .form-field { margin-bottom: 12px; }
         .form-field label {
-            display: block; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; color: var(--text-gray); margin-bottom: 4px;
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 4px;
         }
-        .form-field input, .form-field select, .form-field textarea {
-            width: 100%; padding: 12px 14px; border: 2px solid var(--border);
-            border-radius: var(--radius-sm); font-size: 15px;
-            font-family: 'Inter', sans-serif; background: #fafafa;
-            -webkit-appearance: none; appearance: none;
-            transition: all 0.3s;
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background: #fafafa;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: var(--transition);
+            color: var(--text);
         }
-        .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
-            border-color: var(--purple); outline: none; background: var(--white);
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: var(--purple);
+            outline: none;
+            background: var(--white);
         }
         .success-msg {
-            display: none; background: var(--green); color: white;
-            padding: 14px; border-radius: var(--radius-sm);
-            font-weight: 600; font-size: 14px; margin-top: 10px; text-align: center;
+            display: none;
+            background: var(--green);
+            color: white;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
         }
 
         .footer {
-            background: var(--dark); color: white;
-            padding: 30px 14px; margin-top: 40px;
+            background: var(--dark);
+            color: white;
+            padding: 30px 14px;
+            margin-top: 40px;
             transition: background 0.3s;
         }
-        .footer-inner {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-        }
+        .footer-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .footer h4 {
-            font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
-            margin-bottom: 8px; color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.5);
         }
         .footer a, .footer p {
-            color: rgba(255,255,255,0.7); text-decoration: none;
-            font-size: 12px; display: block; margin-bottom: 4px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 4px;
         }
-
         .footer-about-block {
             background: rgba(203,17,171,0.1);
             border: 1px solid rgba(203,17,171,0.25);
@@ -373,7 +581,7 @@
             padding: 8px 20px;
             background: white;
             border-radius: 30px;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
         .footer-about-link:hover {
             background: var(--purple);
@@ -383,9 +591,13 @@
 
         @media (min-width: 769px) {
             .hero {
-                flex-direction: row; display: grid;
-                grid-template-columns: 1fr 1fr; gap: 30px;
-                align-items: center; max-width: 1200px; margin: 20px auto;
+                flex-direction: row;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                align-items: center;
+                max-width: 1200px;
+                margin: 20px auto;
             }
             .hero-content { order: 1; }
             .hero-visual { order: 2; }
@@ -409,19 +621,46 @@
 </head>
 <body>
 
-    <!-- Кнопка смены темы -->
+    <!-- ========== COOKIE OVERLAY ========== -->
+    <div class="cookie-overlay" id="cookie-overlay">
+        <div class="cookie-modal">
+            <h3>🍪 Мы используем cookie</h3>
+            <p>
+                Мы используем файлы cookie для улучшения работы сайта, аналитики и показа рекламы. 
+                Продолжая использовать сайт, вы соглашаетесь с нашей 
+                <a href="/privacy" target="_blank">политикой конфиденциальности</a>.
+            </p>
+            <div class="cookie-buttons">
+                <button class="btn-accept-all" onclick="acceptAllCookies()">Принять все</button>
+                <div class="row">
+                    <button class="btn-settings-cookie" onclick="toggleCookieSettings()">⚙️ Настроить</button>
+                    <button class="btn-decline-all" onclick="declineAllCookies()">Отклонить</button>
+                </div>
+            </div>
+            <div class="cookie-settings" id="cookie-settings">
+                <label>
+                    <div>Необходимые <span>Для работы сайта</span></div>
+                    <input type="checkbox" checked disabled>
+                </label>
+                <label>
+                    <div>Аналитические <span>Статистика посещений</span></div>
+                    <input type="checkbox" id="cookie-analytics" checked>
+                </label>
+                <label>
+                    <div>Маркетинговые <span>Реклама и предложения</span></div>
+                    <input type="checkbox" id="cookie-marketing" checked>
+                </label>
+                <button class="btn-save-settings" onclick="saveCookieSettings()">Сохранить настройки</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== THEME TOGGLE ========== -->
     <button class="theme-toggle" id="theme-toggle" title="Сменить тему">
         <i class="fas fa-moon"></i>
     </button>
 
-    <div class="cookie-banner" id="cookie-banner">
-        <p>🍪 Мы используем cookie для улучшения работы сайта. <a href="#">Подробнее</a></p>
-        <div>
-            <button onclick="acceptCookies()">Принять</button>
-            <button class="btn-outline-sm" onclick="declineCookies()">Отклонить</button>
-        </div>
-    </div>
-
+    <!-- ========== TOP BAR ========== -->
     <div class="top-bar">
         <div class="top-bar-inner">
             <span><i class="fas fa-map-marker-alt"></i> СПБ и ЛО</span>
@@ -430,6 +669,7 @@
         </div>
     </div>
 
+    <!-- ========== HEADER ========== -->
     <div class="header">
         <div class="header-inner">
             <a href="/" class="logo">
@@ -445,17 +685,16 @@
         </div>
     </div>
 
+    <!-- ========== HERO ========== -->
     <div class="hero">
         <div class="hero-content">
             <div class="hero-badge"><i class="fas fa-crown"></i> С 2014 года</div>
             <h1>Укладка тротуарной <span class="accent">плитки</span> под ключ</h1>
             <p>Проектируем, подбираем материалы и выполняем мощение любой сложности. Смета за 15 минут.</p>
-
             <a href="/onas" class="about-link">
                 <i class="fas fa-info-circle"></i> Узнать больше о компании
                 <i class="fas fa-arrow-right"></i>
             </a>
-
             <div class="hero-buttons">
                 <a href="#order-form" class="btn-primary"><i class="fas fa-file-invoice"></i> Получить смету</a>
                 <a href="#materials-section" class="btn-outline"><i class="fas fa-th-large"></i> Материалы</a>
@@ -472,16 +711,19 @@
         </div>
     </div>
 
+    <!-- ========== МАТЕРИАЛЫ ========== -->
     <div class="section" id="materials-section">
         <h2 class="section-title">🔥 Популярные материалы</h2>
         <div class="catalog-grid" id="materials-grid">Загрузка...</div>
     </div>
 
+    <!-- ========== УСЛУГИ ========== -->
     <div class="section" id="services-section">
         <h2 class="section-title">🔧 Наши услуги</h2>
         <div class="catalog-grid" id="services-grid">Загрузка...</div>
     </div>
 
+    <!-- ========== ПРЕИМУЩЕСТВА ========== -->
     <div class="section">
         <h2 class="section-title">✅ Почему выбирают нас</h2>
         <div class="benefits-row">
@@ -494,6 +736,7 @@
         </div>
     </div>
 
+    <!-- ========== ГАЛЕРЕЯ ========== -->
     <div class="section">
         <h2 class="section-title">📸 Наши работы</h2>
         <div class="gallery-grid">
@@ -504,6 +747,7 @@
         </div>
     </div>
 
+    <!-- ========== АКЦИЯ ========== -->
     <div class="section">
         <div class="promo-banner">
             <div class="promo-content">
@@ -514,6 +758,7 @@
         </div>
     </div>
 
+    <!-- ========== ФОРМА ========== -->
     <div class="section" id="order-form">
         <div class="form-section">
             <div>
@@ -532,6 +777,7 @@
         </div>
     </div>
 
+    <!-- ========== FOOTER ========== -->
     <div class="footer">
         <div class="footer-inner">
             <div>
@@ -569,7 +815,53 @@
     </div>
 
     <script>
-        // ========== ТЕМА ==========
+        // ========== COOKIE ==========
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 86400000));
+            document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+        }
+
+        function acceptAllCookies() {
+            setCookie('cookie-consent', 'all', 365);
+            setCookie('cookie-analytics', 'true', 365);
+            setCookie('cookie-marketing', 'true', 365);
+            document.getElementById('cookie-overlay').classList.remove('show');
+        }
+
+        function declineAllCookies() {
+            setCookie('cookie-consent', 'necessary', 365);
+            setCookie('cookie-analytics', 'false', 365);
+            setCookie('cookie-marketing', 'false', 365);
+            document.getElementById('cookie-overlay').classList.remove('show');
+        }
+
+        function toggleCookieSettings() {
+            document.getElementById('cookie-settings').classList.toggle('show');
+        }
+
+        function saveCookieSettings() {
+            const analytics = document.getElementById('cookie-analytics').checked;
+            const marketing = document.getElementById('cookie-marketing').checked;
+            setCookie('cookie-consent', 'custom', 365);
+            setCookie('cookie-analytics', analytics ? 'true' : 'false', 365);
+            setCookie('cookie-marketing', marketing ? 'true' : 'false', 365);
+            document.getElementById('cookie-overlay').classList.remove('show');
+        }
+
+        // Показать окно если нет согласия
+        if (!getCookie('cookie-consent')) {
+            document.getElementById('cookie-overlay').classList.add('show');
+        }
+
+        // ========== THEME ==========
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
 
@@ -585,19 +877,9 @@
             }
         }
 
-        themeToggle.onclick = () => {
-            setTheme(!document.body.classList.contains('dark-theme'));
-        };
+        themeToggle.onclick = () => setTheme(!document.body.classList.contains('dark-theme'));
 
-        // Загрузка сохранённой темы
-        if (localStorage.getItem('theme') === 'dark') {
-            setTheme(true);
-        }
-
-        // ========== COOKIE ==========
-        function acceptCookies() { localStorage.setItem('cookies-accepted', 'true'); document.getElementById('cookie-banner').classList.remove('show'); }
-        function declineCookies() { localStorage.setItem('cookies-accepted', 'false'); document.getElementById('cookie-banner').classList.remove('show'); }
-        if (!localStorage.getItem('cookies-accepted')) document.getElementById('cookie-banner').classList.add('show');
+        if (localStorage.getItem('theme') === 'dark') setTheme(true);
 
         // ========== ДАННЫЕ ==========
         async function loadMaterials() {
