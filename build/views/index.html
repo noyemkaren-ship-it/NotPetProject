@@ -34,6 +34,60 @@
             --radius-sm: 8px;
         }
 
+        /* Тёмная тема */
+        .dark-theme {
+            --gray-bg: #0d1117;
+            --white: #161b22;
+            --text: #e6edf3;
+            --text-gray: #8b949e;
+            --text-light: #8b949e;
+            --border: #30363d;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+            --dark: #0d1117;
+            --purple-light: rgba(203,17,171,0.15);
+        }
+
+        .dark-theme .header {
+            background: rgba(22,27,34,0.97) !important;
+            border-bottom-color: #30363d !important;
+        }
+
+        .dark-theme .top-bar {
+            background: #0d1117 !important;
+        }
+
+        .dark-theme .footer {
+            background: #0d1117 !important;
+        }
+
+        .dark-theme .hero-stat {
+            background: #161b22 !important;
+        }
+
+        .dark-theme .btn-outline {
+            border-color: #30363d !important;
+            color: #e6edf3 !important;
+        }
+
+        .dark-theme .form-field input,
+        .dark-theme .form-field select,
+        .dark-theme .form-field textarea {
+            background: #0d1117 !important;
+            border-color: #30363d !important;
+            color: #e6edf3 !important;
+        }
+
+        .dark-theme .about-link {
+            background: #161b22 !important;
+            border-color: #30363d !important;
+        }
+
+        .dark-theme .promo-banner {
+            background: linear-gradient(135deg, #0d1117, #161b22) !important;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -44,6 +98,37 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             width: 100%;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Кнопка темы */
+        .theme-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 999;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--purple);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(203,17,171,0.4);
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 28px rgba(203,17,171,0.6);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
 
         .cookie-banner {
@@ -52,7 +137,7 @@
             background: var(--white);
             border-top: 1px solid var(--border);
             padding: 12px 16px;
-            z-index: 9999;
+            z-index: 9998;
             display: none;
             flex-direction: column;
             gap: 10px;
@@ -85,6 +170,7 @@
             background: var(--white); border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 100;
             background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+            transition: background 0.3s;
         }
         .header-inner {
             max-width: 100%; padding: 10px 14px;
@@ -93,7 +179,7 @@
         }
         .logo {
             display: flex; align-items: center; gap: 6px;
-            font-size: 18px; font-weight: 900; color: var(--dark); text-decoration: none;
+            font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none;
         }
         .logo-icon {
             width: 32px; height: 32px; background: var(--purple);
@@ -101,7 +187,7 @@
             justify-content: center; color: white; font-size: 14px;
         }
         .header-phone {
-            font-weight: 700; font-size: 14px; color: var(--dark);
+            font-weight: 700; font-size: 14px; color: var(--text);
             text-decoration: none; display: flex; align-items: center; gap: 4px;
         }
         .header-phone i { color: var(--purple); font-size: 12px; }
@@ -134,7 +220,6 @@
             margin-bottom: 12px; line-height: 1.5;
         }
 
-        /* Кнопка "О НАС" */
         .about-link {
             display: inline-flex;
             align-items: center;
@@ -151,11 +236,7 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .about-link i { color: var(--purple); font-size: 14px; }
-        .about-link:hover {
-            background: #2d2d2d;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            transform: translateY(-1px);
-        }
+        .about-link:hover { background: #2d2d2d; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transform: translateY(-1px); }
 
         .hero-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-primary {
@@ -166,7 +247,7 @@
             flex: 1; justify-content: center; min-width: 140px;
         }
         .btn-outline {
-            background: transparent; color: var(--dark);
+            background: transparent; color: var(--text);
             border: 2px solid var(--border); padding: 14px 20px;
             border-radius: 12px; font-weight: 700; font-size: 14px;
             cursor: pointer; text-decoration: none;
@@ -244,9 +325,10 @@
             border-radius: var(--radius-sm); font-size: 15px;
             font-family: 'Inter', sans-serif; background: #fafafa;
             -webkit-appearance: none; appearance: none;
+            transition: all 0.3s;
         }
         .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
-            border-color: var(--purple); outline: none; background: white;
+            border-color: var(--purple); outline: none; background: var(--white);
         }
         .success-msg {
             display: none; background: var(--green); color: white;
@@ -257,6 +339,7 @@
         .footer {
             background: var(--dark); color: white;
             padding: 30px 14px; margin-top: 40px;
+            transition: background 0.3s;
         }
         .footer-inner {
             display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
@@ -270,7 +353,6 @@
             font-size: 12px; display: block; margin-bottom: 4px;
         }
 
-        /* Блок "О НАС" в футере */
         .footer-about-block {
             background: rgba(203,17,171,0.1);
             border: 1px solid rgba(203,17,171,0.25);
@@ -327,6 +409,11 @@
 </head>
 <body>
 
+    <!-- Кнопка смены темы -->
+    <button class="theme-toggle" id="theme-toggle" title="Сменить тему">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="cookie-banner" id="cookie-banner">
         <p>🍪 Мы используем cookie для улучшения работы сайта. <a href="#">Подробнее</a></p>
         <div>
@@ -364,7 +451,6 @@
             <h1>Укладка тротуарной <span class="accent">плитки</span> под ключ</h1>
             <p>Проектируем, подбираем материалы и выполняем мощение любой сложности. Смета за 15 минут.</p>
 
-            <!-- Кнопка "О НАС" -->
             <a href="/onas" class="about-link">
                 <i class="fas fa-info-circle"></i> Узнать больше о компании
                 <i class="fas fa-arrow-right"></i>
@@ -483,10 +569,37 @@
     </div>
 
     <script>
+        // ========== ТЕМА ==========
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+
+        function setTheme(dark) {
+            if (dark) {
+                document.body.classList.add('dark-theme');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        themeToggle.onclick = () => {
+            setTheme(!document.body.classList.contains('dark-theme'));
+        };
+
+        // Загрузка сохранённой темы
+        if (localStorage.getItem('theme') === 'dark') {
+            setTheme(true);
+        }
+
+        // ========== COOKIE ==========
         function acceptCookies() { localStorage.setItem('cookies-accepted', 'true'); document.getElementById('cookie-banner').classList.remove('show'); }
         function declineCookies() { localStorage.setItem('cookies-accepted', 'false'); document.getElementById('cookie-banner').classList.remove('show'); }
         if (!localStorage.getItem('cookies-accepted')) document.getElementById('cookie-banner').classList.add('show');
 
+        // ========== ДАННЫЕ ==========
         async function loadMaterials() {
             try {
                 const res = await fetch('/api/materials');

@@ -322,7 +322,6 @@ app.post("/login", (req, res) => {
     console.log("[LOG] -> LOGIN POST");
 });
 
-// ========== ЗАПУСК ==========
 app.listen(3000, () => {
   console.log('🚀 ЗАПУСК СЕРВЕРА 🚀');
   console.log('\x1b[34m Сервер запущен на порту -> 3000 \x1b[0m');
