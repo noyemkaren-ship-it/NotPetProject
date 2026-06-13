@@ -82,6 +82,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/onas", (req, res) => {
+    res.sendFile(__dirname + "views/onas.html");
+})
+
 // ========== ЗАЯВКИ ==========
 app.post("/api/zay", (req, res) => {
     let zayData = req.body;
@@ -124,7 +128,6 @@ app.delete("/api/zay/:id", (req, res) => {
     }
 });
 
-// ========== МАТЕРИАЛЫ ==========
 app.get("/api/materials", (req, res) => {
     try {
         let list = JSON.parse(fs.readFileSync(MAT_FILE, "utf8"));

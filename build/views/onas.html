@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Профессиональная укладка тротуарной плитки под ключ в СПБ и Ленинградской области. Гранитная брусчатка, клинкерный кирпич, камень. Скидка 10% до 30.06.2026!">
+  <title>КОМПАНИЯ ПЛИТКА — О НАС</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+      background: #f5f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+
+    /* Основная карточка — строгий деловой стиль как у крупных маркетплейсов */
+    .business-card {
+      max-width: 880px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.05), 0 8px 18px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    /* Шапка с логотипом и контактами — строгая, как в WB */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #f0f0f0;
+      background: #ffffff;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+    }
+
+    /* Левый угол: изображение и название компании */
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .logo-image {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 16px;
+      background: #e9e9e9;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
+      border: 1px solid #eaeaea;
+    }
+
+    .logo-image:hover {
+      transform: scale(1.02);
+    }
+
+    .company-title {
+      font-weight: 600;
+      font-size: 1.4rem;
+      letter-spacing: 0.5px;
+      color: #111;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .company-sub {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #5a5a5a;
+      margin-top: 2px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Контактный блок — строгий и лаконичный */
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .phone-number {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #1e1e1e;
+      letter-spacing: 0.5px;
+      background: #f7f7fa;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .phone-number:hover {
+      background: #ebebf0;
+    }
+
+    .response-time {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #4b4b4b;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f0f0f5;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .response-time::before {
+      content: "⏱";
+      font-size: 0.9rem;
+    }
+
+    /* Основной контент */
+    .content {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    /* Секция с описанием */
+    .about-intro {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #2a2a2a;
+      background: #fafafc;
+      padding: 1.25rem 1.5rem;
+      border-radius: 18px;
+      border-left: 5px solid #2c2c2c;
+      font-style: normal;
+      letter-spacing: 0.2px;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: #121212;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.2px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #eaeaea;
+      padding-bottom:
+
+
+0.6rem;
+    }
+
+    /* Сетки списков — строгие, без лишних украшений */
+    .service-grid, .benefits-grid, .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .service-item, .benefit-item, .why-item {
+      background: #f9f9fc;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      font-weight: 500;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      border: 1px solid #f0f0f4;
+      transition: all 0.15s ease;
+      color: #1f1f1f;
+      word-break: break-word;
+    }
+
+    .service-item:hover, .benefit-item:hover, .why-item:hover {
+      background: #ffffff;
+      border-color: #cfcfcf;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+
+    .service-item i, .benefit-item i, .why-item i {
+      font-style: normal;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .check-icon {
+      font-weight: 700;
+      color: #1c1c1c;
+      font-size: 1.1rem;
+      margin-right: 0.2rem;
+    }
+
+    .clean-note {
+      background: #ffffff;
+      border: 1px dashed #b0b0b0;
+      padding: 0.9rem 1.4rem;
+      border-radius: 14px;
+      font-weight: 500;
+      margin-top: 0.8rem;
+      color: #2d2d2d;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .clean-note u {
+      text-decoration: none;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .highlight-block {
+      background: #111;
+      color: white;
+      padding: 1.3rem 1.8rem;
+      border-radius: 18px;
+      margin: 0.5rem 0 0.2rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .free-measure {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: #1e1e1e;
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border-radius: 14px;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      background: #f2f2f5;
+      padding: 1.5rem;
+      border-radius: 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .cta-phone {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .payment-info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      background: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    hr {
+      border: 0.5px solid #e2e2e6;
+      margin: 0.5rem 0;
+    }
+
+    /* Адаптивность */
+    max-width: 600px {
+      body {
+        padding: 0.8rem;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.2rem 1.2rem;
+      }
+      .contact-info {
+        align-items: flex-start;
+        width: 100%;
+      }
+      .phone-number {
+        font-size: 1.2rem;
+      }
+      .content {
+        padding: 1.5rem 1.2rem;
+      }
+      .service-grid, .benefits-grid, .why-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="business-card">
+    <!-- Шапка: логотип слева + контакты справа -->
+    <header class="header">
+      <div class="brand-block">
+        <!-- Изображение, которое вы указали -->
+        <img src="https://stroimdoma74.ru/upload/iblock/9bd/9bdcb112417d7ac6982ea64fcdd0a1a1.jpg&quot; 
+             alt="Плитка-О Нас логотип" 
+             class="logo-image"
+             loading="eager">
+        <div>
+          <div class="company-title">ПЛИТКА-О НАС</div>
+          <div class="company-sub">Профессиональная укладка с 2013 года</div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <a href="tel:+79990332527" class="phone-number">+7 999 033-25-27</a>
+        <span class="response-time">свяжемся в течение 15 минут</span>
+      </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="content">
+      <!-- О компании -->
+      <div class="about-intro">
+        <i style="font-style: normal; font-weight: 600;">Наша компания специализируется на
+
+
+укладке и продаже плиток / брусчатки под ключ.</i>
+      </div>
+
+      <!-- Услуги -->
+      <section>
+        <h2 class="section-title">▎НАШИ УСЛУГИ</h2>
+        <div class="service-grid">
+          <div class="service-item"><i><span class="check-icon">✓</span> Укладка тротуарной плитки (ёлочка, кирпич, ромб)</i></div>
+          <div class="service-item"><i><span class="check-icon">✓</span> Устройство дорожек, парковок, дворовых территорий</i></div>
+          <div class="service-item"><i><span class="check-icon">✓</span> Монтаж отмостки вокруг дома</i></div>
+          <div class="service-item"><i><span class="check-icon">✓</span> Подготовка основания с геотекстилем и щебнем</i></div>
+          <div class="service-item"><i><span class="check-icon">✓</span> Установка бордюров и водоотводов</i></div>
+        </div>
+        <div class="clean-note">
+          <span>🛡️</span> <i style="font-style: normal;">Не оставим следа после себя — уберём <u>строительный мусор и очистим готовую площадку</u></i>
+        </div>
+      </section>
+
+      <!-- Преимущества -->
+      <section>
+        <h2 class="section-title">▎ВЫБИРАЯ НАС, ВЫ ПОЛУЧАЕТЕ</h2>
+        <div class="benefits-grid">
+          <div class="benefit-item"><i><span class="check-icon">✓</span> <b>Гарантия</b> на все работы</i></div>
+          <div class="benefit-item"><i><span class="check-icon">✓</span> Соблюдение сроков — без задержек</i></div>
+          <div class="benefit-item"><i><span class="check-icon">✓</span> <b>Зафиксированная</b> стоимость работы и материалов</i></div>
+        </div>
+      </section>
+
+      <!-- Почему мы -->
+      <section>
+        <h2 class="section-title">▎ПОЧЕМУ ИМЕННО МЫ?</h2>
+        <div class="why-grid">
+          <div class="why-item"><i><span class="check-icon">●</span> Опыт более 11 лет!</i></div>
+          <div class="why-item"><i><span class="check-icon">●</span> Работаем <b>строго</b> по технологии</i></div>
+          <div class="why-item"><i><span class="check-icon">●</span> <u>Фиксированные цены</u> — без скрытых платежей</i></div>
+          <div class="why-item" style="background: #1a1a1a; color: white; border-color: #1a1a1a;">
+            <i><span class="check-icon" style="color: #fff;">★</span> <b>БЕСПЛАТНЫЙ ЗАМЕР И РАСЧЕТ СМЕТЫ!</b></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- Призыв к действию -->
+      <div class="cta-block">
+        <div style="font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Звоните / пишите прямо сейчас!</div>
+        <div class="cta-phone">+7 999 033-25-27</div>
+        <div style="font-weight: 500; margin-top: 0.2rem;">
+          <u>Работаем по Санкт-Петербургу и Ленинградской области</u>
+        </div>
+        <div class="payment-info">
+          <span>💳 Наличные</span>
+          <span>🏦 Безналичные с НДС / без НДС</span>
+        </div>
+      </div>
+      
+      <!-- Дополнительная строка с условиями (строгий стиль) -->
+      <div style="font-size: 0.85rem; color: #5e5e5e; text-align: center; border-top: 1px solid #eaeaea; padding-top: 1.2rem; margin-top: 0.3rem;">
+        Принимаем любые формы оплаты. Фиксированная смета до начала работ.
+      </div>
+    </main>
+  </div>
+</body>
+</html>
