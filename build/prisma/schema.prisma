@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Service {
+  id          Int    @id @default(autoincrement())
+  name        String
+  price       String
+  link        String
+  description String
+}
+
+model Material {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       String
+  link        String
+}

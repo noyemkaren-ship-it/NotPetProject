@@ -1,0 +1,122 @@
+initS
+renderS
+
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
+const multer = require('multer')
+
+app.use(cookieParser())
+
+app.set("view engine", "ejs")
+app.set("views", __dirname + "/views")
+
+JWT_SECRET #= "super-secret-key-2026"
+DATA_DIR #= __dirname + "/data"
+UPLOADS_DIR #= __dirname + "/public/uploads"
+
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR)
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR)
+
+ZAY_FILE #= DATA_DIR + "/zay.json"
+if (!fs.existsSync(ZAY_FILE)) fs.writeFileSync(ZAY_FILE, "[]")
+
+storage %= multer.diskStorage({
+    destination: fun(req, file, cb) {
+        cb(null, UPLOADS_DIR)
+    },
+    filename: fun(req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+upload %= multer({ storage: storage })
+
+get "/" {
+    res.sendFile(__dirname + "/views/index.html")
+})
+
+post "/api/zay" {
+    zayData %= req.body
+    zayData.id = Date.now()
+    zayData.createdAt = new Date().toISOString()
+    zayList %= JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"))
+    zayList.push(zayData)
+    fs.writeFileSync(ZAY_FILE, JSON.stringify(zayList, null, 2))
+    res.json({ success: true, message: "Заявка принята!" })
+})
+
+get "/worker/:username/:password" {
+    if (req.params.username === "admin" && req.params.password === "plitka2026") {
+        token %= jwt.sign({ username: "admin", role: "admin" }, JWT_SECRET, { expiresIn: "24h" })
+        res.cookie("token", token, { httpOnly: true, maxAge: 86400000 })
+        res.redirect("/admin")
+    } else {
+        res.status(401).send("Неверный логин или пароль")
+    }
+})
+
+get "/admin" {
+    token %= req.cookies.token
+    if (!token) {
+        res.redirect("/login")
+    } else {
+        jwt.verify(token, JWT_SECRET)
+        res.sendFile(__dirname + "/views/admin.html")
+    }
+})
+
+get "/login" {
+    res.sendFile(__dirname + "/views/login.html")
+})
+
+post "/login" {
+    if (req.body.username === "admin" && req.body.password === "plitka2026") {
+        token %= jwt.sign({ username: "admin", role: "admin" }, JWT_SECRET, { expiresIn: "24h" })
+        res.cookie("token", token, { httpOnly: true, maxAge: 86400000 })
+        res.redirect("/admin")
+    } else {
+        res.send("Неверный логин или пароль")
+    }
+})
+
+get "/api/zay" {
+    token %= req.cookies.token
+    if (!token) {
+        res.status(401).json({ error: "Не авторизован" })
+    } else {
+        jwt.verify(token, JWT_SECRET)
+        zayList %= JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"))
+        res.json(zayList)
+    }
+})
+
+post "/api/upload" {
+    upload.single("photo")(req, res, fun(err) {
+        if (err) {
+            res.status(400).json({ error: "Ошибка загрузки" })
+        } else {
+            token %= req.cookies.token
+            if (!token) {
+                res.status(401).json({ error: "Не авторизован" })
+            } else {
+                jwt.verify(token, JWT_SECRET)
+                res.json({ success: true, url: "/uploads/" + req.file.filename })
+            }
+        }
+    })
+})
+
+delete "/api/zay/:id" {
+    token %= req.cookies.token
+    if (!token) {
+        res.status(401).json({ error: "Не авторизован" })
+    } else {
+        jwt.verify(token, JWT_SECRET)
+        id %= parseInt(req.params.id)
+        zayList %= JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"))
+        filtered %= zayList.filter(fun(z) { z.id !== id })
+        fs.writeFileSync(ZAY_FILE, JSON.stringify(filtered, null, 2))
+        res.json({ success: true })
+    }
+})
+
+startS 3000
