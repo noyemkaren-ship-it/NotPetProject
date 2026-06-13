@@ -77,16 +77,14 @@ let upload = multer({
     }
 });
 
-// ========== ГЛАВНАЯ ==========
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
 });
 
 app.get("/onas", (req, res) => {
-    res.sendFile(__dirname + "views/onas.html");
+    res.sendFile(__dirname + "/views/onas.html");
 })
 
-// ========== ЗАЯВКИ ==========
 app.post("/api/zay", (req, res) => {
     let zayData = req.body;
     zayData.id = Date.now();
