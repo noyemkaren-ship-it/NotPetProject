@@ -79,12 +79,12 @@ let upload = multer({
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
-    console.log("[LOG] -> ГЛАВНАЯ СТРАНИЦА")
+    console.log("[LOG] -> ГЛАВНАЯ СТРАНИЦА");
 });
 
 app.get("/onas", (req, res) => {
     res.sendFile(__dirname + "/views/onas.html");
-    console.log("[LOG] -> СТРАНИЦА ОНАС")
+    console.log("[LOG] -> СТРАНИЦА ОНАС");
 })
 
 app.post("/api/zay", (req, res) => {
@@ -95,7 +95,7 @@ app.post("/api/zay", (req, res) => {
     zayList.push(zayData);
     fs.writeFileSync(ZAY_FILE, JSON.stringify(zayList, null, 2));
     res.json({ success: true, message: "Заявка принята!" });
-    console.log("[LOG] -> /api/zay")
+    console.log("[LOG] -> /api/zay");
 });
 
 app.get("/api/zay", (req, res) => {
@@ -110,7 +110,7 @@ app.get("/api/zay", (req, res) => {
     } catch (err) {
         res.status(401).json({ error: "Токен истёк" });
     }
-    console.log("[LOG] -> /api/zay")
+    console.log("[LOG] -> /api/zay");
 });
 
 app.delete("/api/zay/:id", (req, res) => {
