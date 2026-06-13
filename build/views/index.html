@@ -25,7 +25,6 @@
             --border: #ececec;
             --green: #0cc477;
             --orange: #ff7b00;
-            --red: #f85149;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
             --shadow: 0 4px 20px rgba(0,0,0,0.06);
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
@@ -47,7 +46,6 @@
             width: 100%;
         }
 
-        /* COOKIE */
         .cookie-banner {
             position: fixed;
             bottom: 0; left: 0; right: 0;
@@ -65,383 +63,247 @@
         .cookie-banner p a { color: var(--purple); text-decoration: underline; }
         .cookie-banner div { display: flex; gap: 8px; }
         .cookie-banner button {
-            flex: 1;
-            background: var(--purple);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
+            flex: 1; background: var(--purple); color: white;
+            border: none; padding: 10px; border-radius: 8px;
+            font-weight: 700; font-size: 13px; cursor: pointer;
         }
         .cookie-banner .btn-outline-sm {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: transparent; border: 1px solid var(--border); color: var(--text);
         }
 
-        /* TOP BAR */
         .top-bar {
-            background: var(--dark);
-            color: white;
-            padding: 6px 0;
-            font-size: 10px;
-            font-weight: 500;
+            background: var(--dark); color: white;
+            padding: 6px 0; font-size: 10px; font-weight: 500;
         }
         .top-bar-inner {
-            max-width: 100%;
-            padding: 0 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-            text-align: center;
+            max-width: 100%; padding: 0 12px;
+            display: flex; justify-content: center; align-items: center;
+            flex-wrap: wrap; gap: 6px; text-align: center;
         }
 
-        /* HEADER */
         .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255,255,255,0.97);
-            backdrop-filter: blur(10px);
+            background: var(--white); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
         }
         .header-inner {
-            max-width: 100%;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            flex-wrap: wrap;
+            max-width: 100%; padding: 10px 14px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 8px; flex-wrap: wrap;
         }
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 18px;
-            font-weight: 900;
-            color: var(--dark);
-            text-decoration: none;
+            display: flex; align-items: center; gap: 6px;
+            font-size: 18px; font-weight: 900; color: var(--dark); text-decoration: none;
         }
         .logo-icon {
-            width: 32px; height: 32px;
-            background: var(--purple);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
+            width: 32px; height: 32px; background: var(--purple);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 14px;
         }
         .header-phone {
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--dark);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            font-weight: 700; font-size: 14px; color: var(--dark);
+            text-decoration: none; display: flex; align-items: center; gap: 4px;
         }
         .header-phone i { color: var(--purple); font-size: 12px; }
         .header-btn {
-            background: var(--purple);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
+            background: var(--purple); color: white; border: none;
+            padding: 10px 16px; border-radius: 10px; font-weight: 700;
+            font-size: 13px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
         }
 
-        /* HERO */
         .hero {
-            max-width: 100%;
-            padding: 16px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            max-width: 100%; padding: 16px 14px;
+            display: flex; flex-direction: column; gap: 16px;
         }
         .hero-content { order: 2; }
         .hero-visual { order: 1; }
         .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--purple-light);
-            color: var(--purple-dark);
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 10px;
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--purple-light); color: var(--purple-dark);
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            padding: 4px 12px; border-radius: 20px; margin-bottom: 10px;
         }
         .hero h1 {
-            font-size: 28px;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
+            font-size: 28px; font-weight: 900; line-height: 1.1;
+            letter-spacing: -1px; margin-bottom: 8px;
         }
         .hero h1 .accent { color: var(--purple); }
         .hero p {
-            font-size: 14px;
-            color: var(--text-light);
-            margin-bottom: 16px;
-            line-height: 1.5;
+            font-size: 14px; color: var(--text-light);
+            margin-bottom: 12px; line-height: 1.5;
         }
+
+        /* Кнопка "О НАС" */
+        .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .about-link i { color: var(--purple); font-size: 14px; }
+        .about-link:hover {
+            background: #2d2d2d;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
+
         .hero-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-primary {
-            background: var(--purple);
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: center;
-            min-width: 140px;
+            background: var(--purple); color: white; border: none;
+            padding: 14px 20px; border-radius: 12px; font-weight: 700;
+            font-size: 14px; cursor: pointer; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 6px;
+            flex: 1; justify-content: center; min-width: 140px;
         }
         .btn-outline {
-            background: transparent;
-            color: var(--dark);
-            border: 2px solid var(--border);
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: center;
-            min-width: 140px;
+            background: transparent; color: var(--dark);
+            border: 2px solid var(--border); padding: 14px 20px;
+            border-radius: 12px; font-weight: 700; font-size: 14px;
+            cursor: pointer; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 6px;
+            flex: 1; justify-content: center; min-width: 140px;
         }
         .hero-img-main {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
+            width: 100%; aspect-ratio: 16/9; object-fit: cover;
+            border-radius: var(--radius-lg); box-shadow: var(--shadow);
         }
-        .hero-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+        .hero-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
         .hero-stat {
-            flex: 1;
-            min-width: 60px;
-            text-align: center;
-            background: var(--white);
-            border-radius: 10px;
-            padding: 10px 6px;
-            box-shadow: var(--shadow-sm);
+            flex: 1; min-width: 60px; text-align: center;
+            background: var(--white); border-radius: 10px;
+            padding: 10px 6px; box-shadow: var(--shadow-sm);
         }
         .hero-stat .num { font-size: 20px; font-weight: 900; color: var(--purple); }
         .hero-stat .label { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
 
-        /* SECTIONS */
-        .section {
-            max-width: 100%;
-            padding: 0 14px;
-            margin: 32px 0;
-        }
-        .section-title {
-            font-size: 22px;
-            font-weight: 900;
-            margin-bottom: 14px;
-        }
+        .section { max-width: 100%; padding: 0 14px; margin: 32px 0; }
+        .section-title { font-size: 22px; font-weight: 900; margin-bottom: 14px; }
 
-        /* CATALOG */
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .product-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
+            background: var(--white); border-radius: var(--radius-lg);
+            overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
         }
-        .product-card .img-wrap {
-            aspect-ratio: 1/1;
-            overflow: hidden;
-            background: #e8e5dc;
-        }
-        .product-card .img-wrap img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .product-card .img-wrap { aspect-ratio: 1/1; overflow: hidden; background: #e8e5dc; }
+        .product-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .product-card .card-body { padding: 10px; }
         .product-card .price { font-size: 16px; font-weight: 800; color: var(--purple); }
         .product-card h3 { font-size: 13px; font-weight: 600; }
         .product-card .desc { font-size: 11px; color: var(--text-gray); }
 
-        /* BENEFITS */
-        .benefits-row {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .benefits-row { display: flex; flex-direction: column; gap: 8px; }
         .benefit-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            display: flex;
-            gap: 12px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
+            background: var(--white); border-radius: var(--radius-lg);
+            padding: 16px; display: flex; gap: 12px;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--border);
         }
         .benefit-icon {
-            width: 40px; height: 40px;
-            background: var(--purple-light);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: var(--purple);
-            flex-shrink: 0;
+            width: 40px; height: 40px; background: var(--purple-light);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px; color: var(--purple); flex-shrink: 0;
         }
         .benefit-card h4 { font-size: 14px; font-weight: 700; }
         .benefit-card p { font-size: 12px; color: var(--text-gray); }
 
-        /* GALLERY */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-        }
-        .g-item {
-            border-radius: var(--radius);
-            overflow: hidden;
-            aspect-ratio: 1/1;
-        }
-        .g-item img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .g-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 1/1; }
+        .g-item img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* PROMO */
         .promo-banner {
             background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            border-radius: var(--radius-lg);
-            padding: 24px 18px;
-            text-align: center;
-            color: white;
+            border-radius: var(--radius-lg); padding: 24px 18px;
+            text-align: center; color: white;
         }
-        .promo-content .big-discount {
-            font-size: 48px;
-            font-weight: 900;
-            color: var(--purple);
-        }
+        .promo-content .big-discount { font-size: 48px; font-weight: 900; color: var(--purple); }
         .promo-content p { font-size: 14px; opacity: 0.8; margin: 8px 0 16px; }
 
-        /* FORM */
         .form-section {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 20px 16px;
-            box-shadow: var(--shadow);
+            background: var(--white); border-radius: var(--radius-lg);
+            padding: 20px 16px; box-shadow: var(--shadow);
         }
         .form-section h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
         .form-section .subtitle { font-size: 13px; color: var(--text-gray); margin-bottom: 16px; }
         .form-image { display: none; }
         .form-field { margin-bottom: 12px; }
         .form-field label {
-            display: block;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-gray);
-            margin-bottom: 4px;
+            display: block; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; color: var(--text-gray); margin-bottom: 4px;
         }
-        .form-field input,
-        .form-field select,
-        .form-field textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            background: #fafafa;
-            -webkit-appearance: none;
-            appearance: none;
+        .form-field input, .form-field select, .form-field textarea {
+            width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 15px;
+            font-family: 'Inter', sans-serif; background: #fafafa;
+            -webkit-appearance: none; appearance: none;
         }
-        .form-field input:focus,
-        .form-field select:focus,
-        .form-field textarea:focus {
-            border-color: var(--purple);
-            outline: none;
-            background: white;
+        .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+            border-color: var(--purple); outline: none; background: white;
         }
         .success-msg {
-            display: none;
-            background: var(--green);
-            color: white;
-            padding: 14px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
+            display: none; background: var(--green); color: white;
+            padding: 14px; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 14px; margin-top: 10px; text-align: center;
         }
 
-        /* FOOTER */
         .footer {
-            background: var(--dark);
-            color: white;
-            padding: 30px 14px;
-            margin-top: 40px;
+            background: var(--dark); color: white;
+            padding: 30px 14px; margin-top: 40px;
         }
         .footer-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
         }
         .footer h4 {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            color: rgba(255,255,255,0.5);
+            font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 8px; color: rgba(255,255,255,0.5);
         }
         .footer a, .footer p {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size: 12px;
-            display: block;
-            margin-bottom: 4px;
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-size: 12px; display: block; margin-bottom: 4px;
         }
 
-        /* DESKTOP */
+        /* Блок "О НАС" в футере */
+        .footer-about-block {
+            background: rgba(203,17,171,0.1);
+            border: 1px solid rgba(203,17,171,0.25);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 16px;
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+        .footer-about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            padding: 8px 20px;
+            background: white;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+        .footer-about-link:hover {
+            background: var(--purple);
+            color: white;
+            box-shadow: 0 4px 15px rgba(203,17,171,0.3);
+        }
+
         @media (min-width: 769px) {
             .hero {
-                flex-direction: row;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-                align-items: center;
-                max-width: 1200px;
-                margin: 20px auto;
+                flex-direction: row; display: grid;
+                grid-template-columns: 1fr 1fr; gap: 30px;
+                align-items: center; max-width: 1200px; margin: 20px auto;
             }
             .hero-content { order: 1; }
             .hero-visual { order: 2; }
@@ -452,26 +314,14 @@
             .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
             .gallery-grid { grid-template-columns: repeat(4, 1fr); }
             .gallery-grid .g-item:first-child { grid-column: span 2; grid-row: span 2; }
-            .form-section {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-                padding: 30px;
-            }
-            .form-image {
-                display: block;
-                width: 100%;
-                aspect-ratio: 3/4;
-                object-fit: cover;
-                border-radius: var(--radius-lg);
-            }
-            .benefits-row {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            }
+            .form-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px; }
+            .form-image { display: block; width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius-lg); }
+            .benefits-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
             .section { max-width: 1200px; margin: 40px auto; }
             .header-inner, .top-bar-inner { max-width: 1200px; margin: 0 auto; }
             .promo-banner { display: flex; justify-content: space-between; align-items: center; text-align: left; }
+            .footer-inner { grid-template-columns: repeat(5, 1fr); }
+            .footer-about-block { grid-column: span 1; margin-top: 0; }
         }
     </style>
 </head>
@@ -513,7 +363,13 @@
             <div class="hero-badge"><i class="fas fa-crown"></i> С 2014 года</div>
             <h1>Укладка тротуарной <span class="accent">плитки</span> под ключ</h1>
             <p>Проектируем, подбираем материалы и выполняем мощение любой сложности. Смета за 15 минут.</p>
-            <a href="/onas">БОЛЬШЕ О НАС ИНФОРМАЦИИ</a>
+
+            <!-- Кнопка "О НАС" -->
+            <a href="/onas" class="about-link">
+                <i class="fas fa-info-circle"></i> Узнать больше о компании
+                <i class="fas fa-arrow-right"></i>
+            </a>
+
             <div class="hero-buttons">
                 <a href="#order-form" class="btn-primary"><i class="fas fa-file-invoice"></i> Получить смету</a>
                 <a href="#materials-section" class="btn-outline"><i class="fas fa-th-large"></i> Материалы</a>
@@ -567,7 +423,6 @@
             <div class="promo-content">
                 <div class="big-discount">–10%</div>
                 <p>на все виды работ до 30 июня 2026</p>
-                
             </div>
             <a href="#order-form" class="btn-primary" style="background:white; color:var(--purple);">Зафиксировать скидку</a>
         </div>
@@ -619,9 +474,10 @@
                 <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
                 <a href="#"><i class="fab fa-vk"></i> ВКонтакте</a>
             </div>
-            <div>
-                <h4>Также вы можете узнать больше о нас</h4>
-                <a href="/onas">О НАС</a>
+            <div class="footer-about-block">
+                <a href="/onas" class="footer-about-link">
+                    <i class="fas fa-building"></i> О компании
+                </a>
             </div>
         </div>
     </div>
