@@ -79,10 +79,12 @@ let upload = multer({
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
+    console.log("[LOG] -> ГЛАВНАЯ СТРАНИЦА")
 });
 
 app.get("/onas", (req, res) => {
     res.sendFile(__dirname + "/views/onas.html");
+    console.log("[LOG] -> СТРАНИЦА ОНАС")
 })
 
 app.post("/api/zay", (req, res) => {
@@ -93,6 +95,7 @@ app.post("/api/zay", (req, res) => {
     zayList.push(zayData);
     fs.writeFileSync(ZAY_FILE, JSON.stringify(zayList, null, 2));
     res.json({ success: true, message: "Заявка принята!" });
+    console.log("[LOG] -> /api/zay")
 });
 
 app.get("/api/zay", (req, res) => {
@@ -107,6 +110,7 @@ app.get("/api/zay", (req, res) => {
     } catch (err) {
         res.status(401).json({ error: "Токен истёк" });
     }
+    console.log("[LOG] -> /api/zay")
 });
 
 app.delete("/api/zay/:id", (req, res) => {
@@ -171,7 +175,6 @@ app.delete("/api/materials/:id", (req, res) => {
     }
 });
 
-// ========== УСЛУГИ ==========
 app.get("/api/services", (req, res) => {
     try {
         let list = JSON.parse(fs.readFileSync(SRV_FILE, "utf8"));
@@ -322,9 +325,24 @@ app.post("/login", (req, res) => {
     console.log("[LOG] -> LOGIN POST");
 });
 
-app.listen(3000, () => {
-  console.log('🚀 ЗАПУСК СЕРВЕРА 🚀');
-  console.log('\x1b[34m Сервер запущен на порту -> 3000 \x1b[0m');
-  console.log('\x1b[34m Можно найти по ссылке -> http://localhost:3000 \x1b[0m');
-  console.log('\x1b[33m Лимит запросов: ' + RATE_LIMIT + ' в минуту \x1b[0m');
+const https = require('https');
+const http = require('http');
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/tratuar.ru/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/tratuar.ru/fullchain.pem')
+};
+
+http.createServer((req, res) => {
+    res.writeHead(301, { 'Location': 'https://' + req.headers['host'] + req.url });
+    res.end();
+}).listen(80, () => {
+    console.log('🔁 HTTP редирект на порту 80');
+});
+
+https.createServer(options, app).listen(443, () => {
+    console.log('🚀 ЗАПУСК СЕРВЕРА 🚀');
+    console.log('\x1b[32m 🔒 HTTPS на порту 443 \x1b[0m');
+    console.log('\x1b[34m Можно найти по ссылке -> https://tratuar.ru \x1b[0m');
+    console.log('\x1b[33m Лимит запросов: ' + RATE_LIMIT + ' в минуту \x1b[0m');
 });
