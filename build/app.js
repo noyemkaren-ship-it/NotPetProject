@@ -17,8 +17,6 @@ const multer = require('multer');
 app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
-
-// ========== ЛИМИТ ЗАПРОСОВ ==========
 const requestCounts = {};
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 60 * 1000;
@@ -39,16 +37,12 @@ function rateLimiter(req, res, next) {
     }
     next();
 }
-
 app.use(rateLimiter);
-
 const JWT_SECRET = "super-secret-key-2026";
 const DATA_DIR = __dirname + "/data";
 const UPLOADS_DIR = __dirname + "/public/uploads";
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-
-// Файлы данных
 const ZAY_FILE = DATA_DIR + "/zay.json";
 const MAT_FILE = DATA_DIR + "/materials.json";
 const SRV_FILE = DATA_DIR + "/services.json";
@@ -222,7 +216,6 @@ app.delete("/api/services/:id", (req, res) => {
     }
 });
 
-// ========== ЗАГРУЗКА ФОТО ==========
 app.post("/api/upload", (req, res) => {
     upload.single("photo")(req, res, function(err) {
         if (err) {
@@ -285,7 +278,6 @@ app.delete("/api/photos/:id", (req, res) => {
     }
 });
 
-// ========== АВТОРИЗАЦИЯ ==========
 app.get("/worker/:username/:password", (req, res) => {
     if (req.params.username === "admin" && req.params.password === "plitka2026") {
         let token = jwt.sign({ username: "admin", role: "admin" }, JWT_SECRET, { expiresIn: "24h" });
@@ -294,11 +286,13 @@ app.get("/worker/:username/:password", (req, res) => {
     } else {
         res.status(401).send("Неверный логин или пароль");
     }
+    console.log("[LOG] -> AUTHARIZATION");
 });
 
 app.get("/admin", (req, res) => {
     let token = req.cookies.token;
     if (!token) {
+        console.log("[LOG] FAILED ADMIN");
         return res.redirect("/login");
     }
     try {
@@ -307,10 +301,13 @@ app.get("/admin", (req, res) => {
     } catch (err) {
         res.redirect("/login");
     }
+    console.log("[LOG] -> ADMIN");
+
 });
 
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/views/login.html");
+    console.log("[LOG] -> LOGIN GET");
 });
 
 app.post("/login", (req, res) => {
@@ -321,6 +318,7 @@ app.post("/login", (req, res) => {
     } else {
         res.send('<p style="color:red;text-align:center;margin-top:50px;font-family:sans-serif;">Неверный логин или пароль. <a href="/login">Попробовать снова</a></p>');
     }
+    console.log("[LOG] -> LOGIN POST");
 });
 
 // ========== ЗАПУСК ==========
