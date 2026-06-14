@@ -1,73 +1,61 @@
-// Compiler
 const express = require('express');
-const app = express();
 const path = require('path');
-const ejs = require('ejs');
 const fs = require('fs');
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-function renderPage(file, data) {
-    const html = fs.readFileSync(__dirname + '/views/' + file, 'utf8');
-    return ejs.render(html, data);
-}
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+
+const app = express();
+
+// ====================== НАСТРОЙКИ ======================
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser());
-app.set("view engine", "ejs");
-app.set("views", __dirname + "/views");
+
+const JWT_SECRET = "super-secret-key-2026";
+const DATA_DIR = path.join(__dirname, 'data');
+const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
+
+// Создаём необходимые папки
+[DATA_DIR, UPLOADS_DIR].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+// ====================== RATE LIMITER ======================
 const requestCounts = {};
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 60 * 1000;
 
 setInterval(() => {
-    for (let ip in requestCounts) {
-        requestCounts[ip] = 0;
-    }
+    Object.keys(requestCounts).forEach(ip => requestCounts[ip] = 0);
 }, RATE_WINDOW);
 
-function rateLimiter(req, res, next) {
+app.use((req, res, next) => {
     const ip = req.ip || req.connection.remoteAddress;
-    if (!requestCounts[ip]) requestCounts[ip] = 0;
-    requestCounts[ip]++;
-
+    requestCounts[ip] = (requestCounts[ip] || 0) + 1;
     if (requestCounts[ip] > RATE_LIMIT) {
         return res.status(429).json({ error: "Слишком много запросов. Подождите минуту." });
     }
     next();
-}
-app.use(rateLimiter);
-const JWT_SECRET = "super-secret-key-2026";
-const DATA_DIR = __dirname + "/data";
-const UPLOADS_DIR = __dirname + "/public/uploads";
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
-const ZAY_FILE = DATA_DIR + "/zay.json";
-const MAT_FILE = DATA_DIR + "/materials.json";
-const SRV_FILE = DATA_DIR + "/services.json";
-const PHOTOS_FILE = DATA_DIR + "/photos.json";
-if (!fs.existsSync(ZAY_FILE)) fs.writeFileSync(ZAY_FILE, "[]");
-if (!fs.existsSync(MAT_FILE)) fs.writeFileSync(MAT_FILE, "[]");
-if (!fs.existsSync(SRV_FILE)) fs.writeFileSync(SRV_FILE, "[]");
-if (!fs.existsSync(PHOTOS_FILE)) fs.writeFileSync(PHOTOS_FILE, "[]");
+});
 
-let storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        const dir = UPLOADS_DIR;
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-        cb(null, dir);
+// ====================== MULTER ======================
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, UPLOADS_DIR);
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
         const filename = Date.now() + '-' + Math.round(Math.random() * 10000) + ext;
         cb(null, filename);
     }
 });
-let upload = multer({ 
+
+const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 },
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
         if (allowed.includes(file.mimetype)) {
             cb(null, true);
@@ -77,6 +65,43 @@ let upload = multer({
     }
 });
 
+// ====================== ФАЙЛЫ ДАННЫХ ======================
+const files = {
+    zay: path.join(DATA_DIR, 'zay.json'),
+    materials: path.join(DATA_DIR, 'materials.json'),
+    services: path.join(DATA_DIR, 'services.json'),
+    photos: path.join(DATA_DIR, 'photos.json')
+};
+
+Object.values(files).forEach(file => {
+    if (!fs.existsSync(file)) fs.writeFileSync(file, '[]');
+});
+
+// ====================== ПОМОЩНИКИ ======================
+const readData = (filePath) => {
+    try {
+        return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    } catch (e) {
+        return [];
+    }
+};
+
+const writeData = (filePath, data) => {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+};
+
+const verifyToken = (req, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ error: "Не авторизован" });
+    try {
+        jwt.verify(token, JWT_SECRET);
+        return true;
+    } catch (err) {
+        return res.status(401).json({ error: "Токен истёк" });
+    }
+};
+
+// ====================== РОУТЫ ======================
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
     console.log("[LOG] -> ГЛАВНАЯ СТРАНИЦА");
@@ -85,203 +110,130 @@ app.get("/", (req, res) => {
 app.get("/onas", (req, res) => {
     res.sendFile(__dirname + "/views/onas.html");
     console.log("[LOG] -> СТРАНИЦА ОНАС");
-})
+});
 
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/views/login.html");
+    console.log("[LOG] -> LOGIN GET");
+});
+
+// ====================== API ======================
+
+// Заявки
 app.post("/api/zay", (req, res) => {
     let zayData = req.body;
     zayData.id = Date.now();
     zayData.createdAt = new Date().toISOString();
-    let zayList = JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"));
+    let zayList = readData(files.zay);
     zayList.push(zayData);
-    fs.writeFileSync(ZAY_FILE, JSON.stringify(zayList, null, 2));
+    writeData(files.zay, zayList);
     res.json({ success: true, message: "Заявка принята!" });
     console.log("[LOG] -> /api/zay");
 });
 
 app.get("/api/zay", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let zayList = JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"));
-        res.json(zayList);
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
-    console.log("[LOG] -> /api/zay");
+    if (!verifyToken(req, res)) return;
+    let zayList = readData(files.zay);
+    res.json(zayList);
+    console.log("[LOG] -> GET /api/zay");
 });
 
 app.delete("/api/zay/:id", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let id = parseInt(req.params.id);
-        let zayList = JSON.parse(fs.readFileSync(ZAY_FILE, "utf8"));
-        let filtered = zayList.filter(function(z) { return z.id !== id; });
-        fs.writeFileSync(ZAY_FILE, JSON.stringify(filtered, null, 2));
-        res.json({ success: true });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+    if (!verifyToken(req, res)) return;
+    let id = parseInt(req.params.id);
+    let zayList = readData(files.zay);
+    let filtered = zayList.filter(z => z.id !== id);
+    writeData(files.zay, filtered);
+    res.json({ success: true });
 });
 
-app.get("/api/materials", (req, res) => {
-    try {
-        let list = JSON.parse(fs.readFileSync(MAT_FILE, "utf8"));
-        res.json(list);
-    } catch (err) {
-        res.json([]);
-    }
-});
+// Материалы
+app.get("/api/materials", (req, res) => res.json(readData(files.materials)));
 
 app.post("/api/materials", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let list = JSON.parse(fs.readFileSync(MAT_FILE, "utf8"));
-        let item = req.body;
-        item.id = Date.now();
-        item.createdAt = new Date().toISOString();
-        list.push(item);
-        fs.writeFileSync(MAT_FILE, JSON.stringify(list, null, 2));
-        res.json({ success: true, item: item });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+    if (!verifyToken(req, res)) return;
+    let item = req.body;
+    item.id = Date.now();
+    item.createdAt = new Date().toISOString();
+    let list = readData(files.materials);
+    list.push(item);
+    writeData(files.materials, list);
+    res.json({ success: true, item });
 });
 
 app.delete("/api/materials/:id", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let id = parseInt(req.params.id);
-        let list = JSON.parse(fs.readFileSync(MAT_FILE, "utf8"));
-        let filtered = list.filter(function(m) { return m.id !== id; });
-        fs.writeFileSync(MAT_FILE, JSON.stringify(filtered, null, 2));
-        res.json({ success: true });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+    if (!verifyToken(req, res)) return;
+    let id = parseInt(req.params.id);
+    let list = readData(files.materials);
+    let filtered = list.filter(m => m.id !== id);
+    writeData(files.materials, filtered);
+    res.json({ success: true });
 });
 
-app.get("/api/services", (req, res) => {
-    try {
-        let list = JSON.parse(fs.readFileSync(SRV_FILE, "utf8"));
-        res.json(list);
-    } catch (err) {
-        res.json([]);
-    }
-});
+// Услуги
+app.get("/api/services", (req, res) => res.json(readData(files.services)));
 
 app.post("/api/services", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let list = JSON.parse(fs.readFileSync(SRV_FILE, "utf8"));
-        let item = req.body;
-        item.id = Date.now();
-        item.createdAt = new Date().toISOString();
-        list.push(item);
-        fs.writeFileSync(SRV_FILE, JSON.stringify(list, null, 2));
-        res.json({ success: true, item: item });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+    if (!verifyToken(req, res)) return;
+    let item = req.body;
+    item.id = Date.now();
+    item.createdAt = new Date().toISOString();
+    let list = readData(files.services);
+    list.push(item);
+    writeData(files.services, list);
+    res.json({ success: true, item });
 });
 
 app.delete("/api/services/:id", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let id = parseInt(req.params.id);
-        let list = JSON.parse(fs.readFileSync(SRV_FILE, "utf8"));
-        let filtered = list.filter(function(s) { return s.id !== id; });
-        fs.writeFileSync(SRV_FILE, JSON.stringify(filtered, null, 2));
-        res.json({ success: true });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+    if (!verifyToken(req, res)) return;
+    let id = parseInt(req.params.id);
+    let list = readData(files.services);
+    let filtered = list.filter(s => s.id !== id);
+    writeData(files.services, filtered);
+    res.json({ success: true });
 });
 
-app.post("/api/upload", (req, res) => {
-    upload.single("photo")(req, res, function(err) {
-        if (err) {
-            return res.status(400).json({ error: "Ошибка загрузки: " + err.message });
-        }
-        let token = req.cookies.token;
-        if (!token) {
-            if (req.file) fs.unlinkSync(req.file.path);
-            return res.status(401).json({ error: "Не авторизован" });
-        }
-        try {
-            jwt.verify(token, JWT_SECRET);
-            const url = "/uploads/" + req.file.filename;
-            
-            let photos = JSON.parse(fs.readFileSync(PHOTOS_FILE, "utf8"));
-            photos.push({
-                id: Date.now(),
-                url: url,
-                originalName: req.file.originalname,
-                createdAt: new Date().toISOString()
-            });
-            fs.writeFileSync(PHOTOS_FILE, JSON.stringify(photos, null, 2));
-            
-            res.json({ success: true, url: url, id: Date.now() });
-        } catch (err) {
-            if (req.file) fs.unlinkSync(req.file.path);
-            res.status(401).json({ error: "Токен истёк" });
-        }
+// Фото
+app.post("/api/upload", upload.single("photo"), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: "Файл не загружен" });
+
+    if (!verifyToken(req, res)) {
+        if (req.file) fs.unlinkSync(req.file.path);
+        return;
+    }
+
+    const url = "/uploads/" + req.file.filename;
+    let photos = readData(files.photos);
+    photos.push({
+        id: Date.now(),
+        url: url,
+        originalName: req.file.originalname,
+        createdAt: new Date().toISOString()
     });
+    writeData(files.photos, photos);
+
+    res.json({ success: true, url: url, id: Date.now() });
 });
 
-app.get("/api/photos", (req, res) => {
-    try {
-        let photos = JSON.parse(fs.readFileSync(PHOTOS_FILE, "utf8"));
-        res.json(photos);
-    } catch (err) {
-        res.json([]);
-    }
-});
+app.get("/api/photos", (req, res) => res.json(readData(files.photos)));
 
 app.delete("/api/photos/:id", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ error: "Не авторизован" });
+    if (!verifyToken(req, res)) return;
+    let id = parseInt(req.params.id);
+    let photos = readData(files.photos);
+    let photo = photos.find(p => p.id === id);
+    
+    if (photo) {
+        const filepath = path.join(__dirname, 'public', photo.url);
+        if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
     }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        let id = parseInt(req.params.id);
-        let photos = JSON.parse(fs.readFileSync(PHOTOS_FILE, "utf8"));
-        let photo = photos.find(function(p) { return p.id === id; });
-        if (photo) {
-            const filepath = __dirname + "/public" + photo.url;
-            if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
-        }
-        let filtered = photos.filter(function(p) { return p.id !== id; });
-        fs.writeFileSync(PHOTOS_FILE, JSON.stringify(filtered, null, 2));
-        res.json({ success: true });
-    } catch (err) {
-        res.status(401).json({ error: "Токен истёк" });
-    }
+
+    let filtered = photos.filter(p => p.id !== id);
+    writeData(files.photos, filtered);
+    res.json({ success: true });
 });
 
+// ====================== АВТОРИЗАЦИЯ ======================
 app.get("/worker/:username/:password", (req, res) => {
     if (req.params.username === "admin" && req.params.password === "plitka2026") {
         let token = jwt.sign({ username: "admin", role: "admin" }, JWT_SECRET, { expiresIn: "24h" });
@@ -290,28 +242,13 @@ app.get("/worker/:username/:password", (req, res) => {
     } else {
         res.status(401).send("Неверный логин или пароль");
     }
-    console.log("[LOG] -> AUTHARIZATION");
+    console.log("[LOG] -> AUTHORIZATION");
 });
 
 app.get("/admin", (req, res) => {
-    let token = req.cookies.token;
-    if (!token) {
-        console.log("[LOG] FAILED ADMIN");
-        return res.redirect("/login");
-    }
-    try {
-        jwt.verify(token, JWT_SECRET);
-        res.sendFile(__dirname + "/views/admin.html");
-    } catch (err) {
-        res.redirect("/login");
-    }
+    if (!verifyToken(req, res)) return res.redirect("/login");
+    res.sendFile(__dirname + "/views/admin.html");
     console.log("[LOG] -> ADMIN");
-
-});
-
-app.get("/login", (req, res) => {
-    res.sendFile(__dirname + "/views/login.html");
-    console.log("[LOG] -> LOGIN GET");
 });
 
 app.post("/login", (req, res) => {
@@ -322,9 +259,9 @@ app.post("/login", (req, res) => {
     } else {
         res.send('<p style="color:red;text-align:center;margin-top:50px;font-family:sans-serif;">Неверный логин или пароль. <a href="/login">Попробовать снова</a></p>');
     }
-    console.log("[LOG] -> LOGIN POST");
 });
 
+// ====================== HTTPS ======================
 const https = require('https');
 const http = require('http');
 
@@ -334,11 +271,9 @@ const options = {
 };
 
 http.createServer((req, res) => {
-    res.writeHead(301, { 'Location': 'https://' + req.headers['host'] + req.url });
+    res.writeHead(301, { 'Location': 'https://' + req.headers.host + req.url });
     res.end();
-}).listen(80, () => {
-    console.log('🔁 HTTP редирект на порту 80');
-});
+}).listen(80, () => console.log('🔁 HTTP редирект на порту 80'));
 
 https.createServer(options, app).listen(443, () => {
     console.log('🚀 ЗАПУСК СЕРВЕРА 🚀');
