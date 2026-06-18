@@ -1,24 +1,41 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Service {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   price       String
-  link        String
-  description String
+  link        String?
+  description String?
+  createdAt   DateTime @default(now())
 }
 
 model Material {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
-  description String
+  description String?
   price       String
-  link        String
+  link        String?
+  createdAt   DateTime @default(now())
+}
+
+model Zayavka {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+}
+
+model Photo {
+  id           Int      @id @default(autoincrement())
+  url          String
+  originalName String?
+  createdAt    DateTime @default(now())
 }
