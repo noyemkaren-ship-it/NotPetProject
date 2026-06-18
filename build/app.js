@@ -4,25 +4,31 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
-
 const app = express();
 
-// ====================== НАСТРОЙКИ ======================
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+const pino = require('pino');
+const logger = pino({
+  level: 'info',
+  transport: {
+    target: 'pino-pretty',
+    options: { colorize: true }
+  }
+});
+
 const JWT_SECRET = "super-secret-key-2026";
 const DATA_DIR = path.join(__dirname, 'data');
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
 
-// Создаём необходимые папки
 [DATA_DIR, UPLOADS_DIR].forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
-// ====================== RATE LIMITER ======================
 const requestCounts = {};
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 60 * 1000;
@@ -40,7 +46,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// ====================== MULTER ======================
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, UPLOADS_DIR);
@@ -65,7 +70,6 @@ const upload = multer({
     }
 });
 
-// ====================== ФАЙЛЫ ДАННЫХ ======================
 const files = {
     zay: path.join(DATA_DIR, 'zay.json'),
     materials: path.join(DATA_DIR, 'materials.json'),
@@ -77,7 +81,6 @@ Object.values(files).forEach(file => {
     if (!fs.existsSync(file)) fs.writeFileSync(file, '[]');
 });
 
-// ====================== ПОМОЩНИКИ ======================
 const readData = (filePath) => {
     try {
         return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -101,20 +104,19 @@ const verifyToken = (req, res) => {
     }
 };
 
-// ====================== РОУТЫ ======================
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
-    console.log("[LOG] -> ГЛАВНАЯ СТРАНИЦА");
+    logger.info("[LOG] -> ГЛАВНАЯ СТРАНИЦА");
 });
 
 app.get("/onas", (req, res) => {
     res.sendFile(__dirname + "/views/onas.html");
-    console.log("[LOG] -> СТРАНИЦА ОНАС");
+    logger.info("[LOG] -> СТРАНИЦА ОНАС");
 });
 
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/views/login.html");
-    console.log("[LOG] -> LOGIN GET");
+    logger.info("[LOG] -> LOGIN GET");
 });
 
 // ====================== API ======================
@@ -128,14 +130,14 @@ app.post("/api/zay", (req, res) => {
     zayList.push(zayData);
     writeData(files.zay, zayList);
     res.json({ success: true, message: "Заявка принята!" });
-    console.log("[LOG] -> /api/zay");
+    logger.info("[LOG] -> /api/zay");
 });
 
 app.get("/api/zay", (req, res) => {
     if (!verifyToken(req, res)) return;
     let zayList = readData(files.zay);
     res.json(zayList);
-    console.log("[LOG] -> GET /api/zay");
+    logger.info("[LOG] -> GET /api/zay");
 });
 
 app.delete("/api/zay/:id", (req, res) => {
@@ -242,13 +244,13 @@ app.get("/worker/:username/:password", (req, res) => {
     } else {
         res.status(401).send("Неверный логин или пароль");
     }
-    console.log("[LOG] -> AUTHORIZATION");
+    logger.info("[LOG] -> AUTHORIZATION");
 });
 
 app.get("/admin", (req, res) => {
     if (!verifyToken(req, res)) return res.redirect("/login");
     res.sendFile(__dirname + "/views/admin.html");
-    console.log("[LOG] -> ADMIN");
+    logger.info("[LOG] -> ADMIN");
 });
 
 app.post("/login", (req, res) => {
@@ -273,11 +275,11 @@ const options = {
 http.createServer((req, res) => {
     res.writeHead(301, { 'Location': 'https://' + req.headers.host + req.url });
     res.end();
-}).listen(80, () => console.log('🔁 HTTP редирект на порту 80'));
+}).listen(80, () => logger.info('🔁 HTTP редирект на порту 80'));
 
 https.createServer(options, app).listen(443, () => {
-    console.log('🚀 ЗАПУСК СЕРВЕРА 🚀');
-    console.log('\x1b[32m 🔒 HTTPS на порту 443 \x1b[0m');
-    console.log('\x1b[34m Можно найти по ссылке -> https://tratuar.ru \x1b[0m');
-    console.log('\x1b[33m Лимит запросов: ' + RATE_LIMIT + ' в минуту \x1b[0m');
+    logger.info('🚀 ЗАПУСК СЕРВЕРА 🚀');
+    logger.info('\x1b[32m 🔒 HTTPS на порту 443 \x1b[0m');
+    logger.info('\x1b[34m Можно найти по ссылке -> https://tratuar.ru \x1b[0m');
+    logger.info('\x1b[33m Лимит запросов: ' + RATE_LIMIT + ' в минуту \x1b[0m');
 });
